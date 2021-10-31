@@ -125,8 +125,10 @@ class Game:
             
             for crashed_car_idx in crashed_cars:
                 user_car = self.cars[crashed_car_idx - 1]
-                if user_car.last_collision + 3 <= seconds:
+                if user_car.last_collision + 2 <= seconds:
                     user_car.respawn()
+                    user_car.MAX_FORWARD_SPEED = 15
+                    user_car.MAX_REVERSE_SPEED = 15
                     
             # RENDERING
             self.screen.fill((0, 0, 0))
@@ -146,13 +148,12 @@ class Game:
 
                     if user_car.last_collision < 999:
                         continue
-                    
-                    user_car.image = pygame.image.load('images/collision.png')
                     user_car.MAX_FORWARD_SPEED = 0
                     user_car.MAX_REVERSE_SPEED = 0
                     user_car.k_right = 0
                     user_car.k_left = 0
-                    user_car.last_collision = seconds
+                    user_car.crash(seconds, pygame.image.load('images/collision.png'))
+                    
                 collisions = {}
             
 
