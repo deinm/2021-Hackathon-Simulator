@@ -177,19 +177,16 @@ class Game:
                 True
             )
 
-            for colled_crosswalk in crosswalk_collisions.values():
+            for user_car, colled_crosswalk in crosswalk_collisions.items():
                 if colled_crosswalk[0].color == "red":
                     self.car_update = False
                     self.win_condition = False
 
-                    crashed_cars = [user_car.player for user_car in list(collisions.keys())]
-                    for crashed_car_idx in crashed_cars:
-                        user_car = self.cars[crashed_car_idx - 1]
-                        user_car.image = pygame.image.load('images/collision.png')
-                        user_car.MAX_FORWARD_SPEED = 0
-                        user_car.MAX_REVERSE_SPEED = 0
-                        user_car.k_right = 0
-                        user_car.k_left = 0
+                    user_car.image = pygame.image.load('images/collision.png')
+                    user_car.MAX_FORWARD_SPEED = 0
+                    user_car.MAX_REVERSE_SPEED = 0
+                    user_car.k_right = 0
+                    user_car.k_left = 0
 
             if trophy_collision != {}:
                 all_parking_done = True

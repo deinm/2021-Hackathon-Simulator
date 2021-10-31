@@ -108,7 +108,10 @@ Map2 = (
     [
 
     ],
-    CarSprite('images/car.png', (75, 760)),
+    [
+        CarSprite('images/car.png', (75, 760), 0, player=1),
+        CarSprite('images/car.png', (75, 600), 0, player=2),
+    ],
 )
 
 
