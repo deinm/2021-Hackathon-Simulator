@@ -61,19 +61,20 @@ class Game:
 
             seconds = round(seconds, 2)
 
-            if self.win_condition is not None:
-                if not record:
-                    record = True
-                    result = seconds
-                    print("Total time:", result)
+            if self.win_condition is not None and not record:
+                record = True
+                result = seconds
+                print("Total time:", result)
+
             events = pygame.event.get()
             if auto:
                 for user_car in self.cars:
                     user_car.k_right = user_car.k_lefy = user_car.k_up = user_car.k_down = 0
             for event in events:
+                if not hasattr(event, 'key'):
+                    continue
+                
                 if auto:
-                    if not hasattr(event, 'key'):
-                        continue
                     if event.type != USEREVENT and event.key in self.event_keys:
                         continue
                     if self.win_condition is None:
@@ -92,24 +93,7 @@ class Game:
                                 self.cars[car_idx].k_down += -1
                         elif event.key == K_ESCAPE:
                             self.databases[car_idx].stop = True
-                    elif self.win_condition is True and event.key == K_SPACE:
-                        print(result)
-                        for database in self.databases:
-                            database.stop = True
-                        time.sleep(0.1)
-                    elif self.win_condition is False and event.key == K_SPACE:
-                        print(result)
-                        time.sleep(0.1)
-                        for database in self.databases:
-                            database.stop = True
-                    elif event.key == K_ESCAPE:
-                        for database in self.databases:
-                            database.stop = True
-                        print(result)
-                        time.sleep(0.1)
                 else:
-                    if not hasattr(event, 'key'):
-                        continue
                     down = event.type == KEYDOWN
                     if self.win_condition is None:
                         car_idx = event.key in self.event_keys[4:]  # if 0~3(True): 1st car, 4~7, 2nd car(False)
@@ -123,22 +107,13 @@ class Game:
                             self.cars[car_idx].k_down = down * -2
                         elif event.key == K_ESCAPE:
                             self.databases[car_idx].stop = True
-                    elif self.win_condition is True and event.key == K_SPACE:
-                        print(result)
-                        time.sleep(0.1)
-                        for database in self.databases:
-                            database.stop = True
-                    elif self.win_condition is False and event.key == K_SPACE:
-                        print(result)
-                        time.sleep(0.1)
-                        for database in self.databases:
-                            database.stop = True
-
-                    elif event.key == K_ESCAPE:
-                        print(result)
-                        time.sleep(0.1)
-                        for database in self.databases:
-                            database.stop = True
+                
+                if self.win_condition is not None and \
+                    (event.key == K_ESCAPE and event.key == K_SPACE):
+                    print(result)
+                    time.sleep(0.1)
+                    for database in self.databases:
+                        database.stop = True
 
             if True in [database.stop for database in self.databases]:
                 break
