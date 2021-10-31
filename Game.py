@@ -77,7 +77,7 @@ class Game:
                     if event.type != USEREVENT and event.key in self.event_keys:
                         continue
                     if self.win_condition is None:
-                        car_idx = 1 + event.key in self.event_keys[4:]  # if 0~3(True): 1st car, 4~7, 2nd car(False)
+                        car_idx = event.key in self.event_keys[4:]  # if 0~3(True): 1st car, 4~7, 2nd car(False)
                         if event.key == self.event_keys[0] or event.key == self.event_keys[4]:
                             if self.cars[car_idx].k_right > -8:
                                 self.cars[car_idx].k_right += -1
@@ -153,7 +153,9 @@ class Game:
             if collisions != {}:
                 self.car_update = False
                 self.win_condition = False
-                for user_car in self.cars:
+                crashed_cars = [car.player for car in list(collisions.keys())]
+                for crashed_car_idx in crashed_cars:
+                    user_car = self.cars[crashed_car_idx - 1]
                     user_car.image = pygame.image.load('images/collision.png')
                     user_car.MAX_FORWARD_SPEED = 0
                     user_car.MAX_REVERSE_SPEED = 0
@@ -260,6 +262,7 @@ class Game:
                 self.car_update = False
                 self.win_condition = False
                 for user_car in self.cars:
+                    print("!")
                     user_car.image = pygame.image.load('images/collision.png')
                     user_car.MAX_FORWARD_SPEED = 0
                     user_car.MAX_REVERSE_SPEED = 0
