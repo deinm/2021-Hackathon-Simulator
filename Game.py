@@ -6,6 +6,7 @@ import numpy as np
 import pygame
 from pygame.locals import (K_DOWN, K_ESCAPE, K_LEFT, K_RIGHT, K_SPACE, K_UP,
                            KEYDOWN, USEREVENT, K_w, K_a, K_s, K_d)
+from typing import Iterable
 
 from Car import CarSprite
 from Trophy import TrophySprite
@@ -15,7 +16,7 @@ from Dynamic import Dynamic
 
 class Game:
     def __init__(self, walls, trophies, parkings,
-                 crosswalks, traffic_signs, schoolzone, cars, databases):
+                 crosswalks, traffic_signs, schoolzone, cars: Iterable[CarSprite], databases):
         self.init_args = \
             [
                 copy.copy(walls),
@@ -55,6 +56,7 @@ class Game:
         seconds = 0
         record = False
         temp_v2x_data = []
+        crashed_cars = []
         while True:
             deltat = self.clock.tick(30)
             seconds += 0.03
@@ -66,10 +68,11 @@ class Game:
                 result = seconds
                 print("Total time:", result)
 
+            # Car control
             events = pygame.event.get()
             if auto:
                 for user_car in self.cars:
-                    user_car.k_right = user_car.k_lefy = user_car.k_up = user_car.k_down = 0
+                    user_car.k_right = user_car.k_left = user_car.k_up = user_car.k_down = 0
 
             for event in events:
                 if not hasattr(event, 'key') or \
@@ -119,25 +122,39 @@ class Game:
 
             if True in [database.stop for database in self.databases]:
                 break
-
+            
+            for crashed_car_idx in crashed_cars:
+                user_car = self.cars[crashed_car_idx - 1]
+                if user_car.last_collision + 3 <= seconds:
+                    user_car.respawn()
+                    
             # RENDERING
             self.screen.fill((0, 0, 0))
             if self.car_update:
                 self.car_group.update(deltat)
+            
             collisions = pygame.sprite.groupcollide(
                 self.car_group, self.wall_group, False, False, collided=pygame.sprite.collide_rect_ratio(0.9))
 
+            # 벽과 충돌했을 때
             if collisions != {}:
-                self.car_update = False
-                self.win_condition = False
+                # self.car_update = False
+                # self.win_condition = False
                 crashed_cars = [user_car.player for user_car in list(collisions.keys())]
                 for crashed_car_idx in crashed_cars:
                     user_car = self.cars[crashed_car_idx - 1]
+
+                    if user_car.last_collision < 999:
+                        continue
+                    
                     user_car.image = pygame.image.load('images/collision.png')
                     user_car.MAX_FORWARD_SPEED = 0
                     user_car.MAX_REVERSE_SPEED = 0
                     user_car.k_right = 0
                     user_car.k_left = 0
+                    user_car.last_collision = seconds
+                collisions = {}
+            
 
             crosswalk_collisions = pygame.sprite.groupcollide(
                 self.car_group,

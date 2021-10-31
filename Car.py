@@ -24,6 +24,9 @@ class CarSprite(pygame.sprite.Sprite):
         self.__direction = direction
         self.player = player
         self.event_keys = [K_RIGHT, K_LEFT, K_UP, K_DOWN]
+        self.initial_direction = direction
+        self.initial_position = position
+        self.last_collision = 999
         if player == 2:
             self.event_keys = [K_d, K_a, K_w, K_s]
         self.update()
@@ -45,6 +48,17 @@ class CarSprite(pygame.sprite.Sprite):
             pygame.transform.rotate(self.__src_image, self.__direction)
         self.rect = self.image.get_rect()
         self.rect.center = self.__position
+    
+    def respawn(self):
+        self.__speed = 0
+        self.__direction = self.initial_direction
+        self.__k_left = self.__k_right = self.__k_down = self.__k_up = 0
+        self.__position = self.initial_position
+        self.__MAX_FORWARD_SPEED = 15
+        self.__MAX_REVERSE_SPEED = 15
+        self.image = self.__src_image
+        self.last_collision = 999
+        self.update()
 
     @property
     def MAX_FORWARD_SPEED(self):
