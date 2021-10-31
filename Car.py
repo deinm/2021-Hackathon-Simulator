@@ -18,6 +18,7 @@ class CarSprite(pygame.sprite.Sprite):
     def __init__(self, image, position, direction=0, player=1):
         pygame.sprite.Sprite.__init__(self)
         self.__src_image = pygame.image.load(image)
+        self.car_image = pygame.image.load(image)
         self.__position = position
         self.__speed = 0
         self.__k_left = self.__k_right = self.__k_down = self.__k_up = 0
@@ -53,11 +54,14 @@ class CarSprite(pygame.sprite.Sprite):
         self.__speed = 0
         self.__direction = self.initial_direction
         self.__k_left = self.__k_right = self.__k_down = self.__k_up = 0
-        self.__position = self.initial_position
-        self.__MAX_FORWARD_SPEED = 15
-        self.__MAX_REVERSE_SPEED = 15
-        self.image = self.__src_image
+        self.__position = self.initial_position        
+        self.__src_image = self.car_image
         self.last_collision = 999
+        self.update()
+    
+    def crash(self, collide_seconds: int, crash_image):
+        self.__src_image = crash_image
+        self.last_collision = collide_seconds
         self.update()
 
     @property
