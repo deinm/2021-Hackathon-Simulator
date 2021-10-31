@@ -29,7 +29,6 @@ class CarSprite(pygame.sprite.Sprite):
         self.update()
 
     def update(self, deltat=False):
-        print(self.player)
         # SIMULATION
         self.__speed += (self.__k_up + self.__k_down)
         if self.__speed > self.__MAX_FORWARD_SPEED:
