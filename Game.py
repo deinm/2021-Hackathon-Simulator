@@ -15,18 +15,18 @@ from Dynamic import Dynamic
 
 class Game:
     def __init__(self, walls, trophies, parkings,
-                 crosswalks, traffic_signs, schoolzone, car, database, player):
+                 crosswalks, traffic_signs, schoolzone, cars, databases):
         self.init_args = \
             [
                 copy.copy(walls),
                 copy.copy(trophies),
                 copy.copy(parkings),
                 copy.copy(crosswalks),
-                copy.copy(car),
-                database
+                copy.copy(cars),
+                copy.copy(databases)
             ]
         pygame.init()
-        self.car = car
+        self.cars = cars
         self.screen = pygame.display.set_mode((1000, 800))
         self.traffic_signs = traffic_signs
         self.school_zones = schoolzone
@@ -39,19 +39,17 @@ class Game:
         self.wall_group = pygame.sprite.RenderPlain(*walls)
         self.trophy_group = pygame.sprite.RenderPlain(*trophies)
         self.crosswalk_group = pygame.sprite.RenderPlain(*crosswalks)
-        self.car_group = pygame.sprite.RenderPlain(car)
+        self.car_group = pygame.sprite.RenderPlain(*cars)
         self.parkings = parkings
         self.rect = self.screen.get_rect()
         self.stop = False
         self.car_update = True
-        self.database = database
+        self.databases = databases
         self.dynamic_flag = False
         self.dynamic = Dynamic('images/bird.png', (-100, 0))
         self.dynamic_group = pygame.sprite.RenderPlain(self.dynamic)
-        self.player = player
-        self.event_keys = [K_RIGHT, K_LEFT, K_UP, K_DOWN]
-        if self.player == 2:
-            self.event_keys = [K_d, K_a, K_w, K_s]
+        self.event_keys = [K_RIGHT, K_LEFT, K_UP, K_DOWN,
+                           K_d, K_a, K_w, K_s]
 
     def run(self, auto=False):
         seconds = 0
@@ -70,8 +68,8 @@ class Game:
                     print("Total time:", result)
             events = pygame.event.get()
             if auto:
-                self.car.k_right = self.car.k_left = \
-                    self.car.k_up = self.car.k_down = 0
+                for user_car in self.cars:
+                    user_car.k_right = user_car.k_lefy = user_car.k_up = user_car.k_down = 0
             for event in events:
                 if auto:
                     if not hasattr(event, 'key'):
@@ -79,30 +77,34 @@ class Game:
                     if event.type != USEREVENT and event.key in self.event_keys:
                         continue
                     if self.win_condition is None:
-                        if event.key == self.event_keys[0]:
-                            if self.car.k_right > -8:
-                                self.car.k_right += -1
-                        elif event.key == self.event_keys[1]:
-                            if self.car.k_left < 8:
-                                self.car.k_left += 1
-                        elif event.key == self.event_keys[2]:
-                            if self.car.k_up < 5:
-                                self.car.k_up += 1
-                        elif event.key == self.event_keys[3]:
-                            if self.car.k_down > -5:
-                                self.car.k_down += -1
+                        car_idx = 1 + event.key in self.event_keys[4:]  # if 0~3(True): 1st car, 4~7, 2nd car(False)
+                        if event.key == self.event_keys[0] or event.key == self.event_keys[4]:
+                            if self.cars[car_idx].k_right > -8:
+                                self.cars[car_idx].k_right += -1
+                        elif event.key == self.event_keys[1] or event.key == self.event_keys[5]:
+                            if self.cars[car_idx].k_left < 8:
+                                self.cars[car_idx].k_left += 1
+                        elif event.key == self.event_keys[2] or event.key == self.event_keys[6]:
+                            if self.cars[car_idx].k_up < 5:
+                                self.cars[car_idx].k_up += 1
+                        elif event.key == self.event_keys[3] or event.key == self.event_keys[7]:
+                            if self.cars[car_idx].k_down > -5:
+                                self.cars[car_idx].k_down += -1
                         elif event.key == K_ESCAPE:
-                            self.database.stop = True
+                            self.databases[car_idx].stop = True
                     elif self.win_condition is True and event.key == K_SPACE:
                         print(result)
-                        self.database.stop = True
+                        for database in self.databases:
+                            database.stop = True
                         time.sleep(0.1)
                     elif self.win_condition is False and event.key == K_SPACE:
                         print(result)
                         time.sleep(0.1)
-                        self.database.stop = True
+                        for database in self.databases:
+                            database.stop = True
                     elif event.key == K_ESCAPE:
-                        self.database.stop = True
+                        for database in self.databases:
+                            database.stop = True
                         print(result)
                         time.sleep(0.1)
                 else:
@@ -110,31 +112,35 @@ class Game:
                         continue
                     down = event.type == KEYDOWN
                     if self.win_condition is None:
-                        if event.key == self.event_keys[0]:
-                            self.car.k_right = down * -5
-                        elif event.key == self.event_keys[1]:
-                            self.car.k_left = down * 5
-                        elif event.key == self.event_keys[2]:
-                            self.car.k_up = down * 2
-                        elif event.key == self.event_keys[3]:
-                            self.car.k_down = down * -2
+                        car_idx = 1 + event.key in self.event_keys[4:]  # if 0~3(True): 1st car, 4~7, 2nd car(False)
+                        if event.key == self.event_keys[0] or event.key == self.event_keys[4]:
+                            self.cars[car_idx].k_right = down * -5
+                        elif event.key == self.event_keys[1] or event.key == self.event_keys[5]:
+                            self.cars[car_idx].k_left = down * 5
+                        elif event.key == self.event_keys[2] or event.key == self.event_keys[6]:
+                            self.cars[car_idx].k_up = down * 2
+                        elif event.key == self.event_keys[3] or event.key == self.event_keys[7]:
+                            self.cars[car_idx].k_down = down * -2
                         elif event.key == K_ESCAPE:
-                            self.database.stop = True
+                            self.databases[car_idx].stop = True
                     elif self.win_condition is True and event.key == K_SPACE:
                         print(result)
                         time.sleep(0.1)
-                        self.database.stop = True
+                        for database in self.databases:
+                            database.stop = True
                     elif self.win_condition is False and event.key == K_SPACE:
                         print(result)
                         time.sleep(0.1)
-                        self.database.stop = True
+                        for database in self.databases:
+                            database.stop = True
 
                     elif event.key == K_ESCAPE:
                         print(result)
                         time.sleep(0.1)
-                        self.database.stop = True
+                        for database in self.databases:
+                            database.stop = True
 
-            if self.database.stop:
+            if True in [database.stop for database in self.databases]:
                 break
 
             # RENDERING
@@ -147,11 +153,12 @@ class Game:
             if collisions != {}:
                 self.car_update = False
                 self.win_condition = False
-                self.car.image = pygame.image.load('images/collision.png')
-                self.car.MAX_FORWARD_SPEED = 0
-                self.car.MAX_REVERSE_SPEED = 0
-                self.car.k_right = 0
-                self.car.k_left = 0
+                for user_car in self.cars:
+                    user_car.image = pygame.image.load('images/collision.png')
+                    user_car.MAX_FORWARD_SPEED = 0
+                    user_car.MAX_REVERSE_SPEED = 0
+                    user_car.k_right = 0
+                    user_car.k_left = 0
 
             crosswalk_collisions = pygame.sprite.groupcollide(
                 self.car_group,
@@ -172,11 +179,12 @@ class Game:
                 if colled_crosswalk[0].color == "red":
                     self.car_update = False
                     self.win_condition = False
-                    self.car.image = pygame.image.load('images/collision.png')
-                    self.car.MAX_FORWARD_SPEED = 0
-                    self.car.MAX_REVERSE_SPEED = 0
-                    self.car.k_right = 0
-                    self.car.k_left = 0
+                    for user_car in self.cars:
+                        user_car.image = pygame.image.load('images/collision.png')
+                        user_car.MAX_FORWARD_SPEED = 0
+                        user_car.MAX_REVERSE_SPEED = 0
+                        user_car.k_right = 0
+                        user_car.k_left = 0
 
             if trophy_collision != {}:
                 all_parking_done = True
@@ -191,25 +199,29 @@ class Game:
                 else:
                     self.car_update = False
                     self.win_condition = False
-                self.car.MAX_FORWARD_SPEED = 0
-                self.car.MAX_REVERSE_SPEED = 0
+                for user_car in self.cars:
+                    user_car.MAX_FORWARD_SPEED = 0
+                    user_car.MAX_REVERSE_SPEED = 0
                 if self.win_condition is True:
-                    self.car.k_right = -5
+                    for user_car in self.cars:
+                        user_car.k_right = -5
 
             temp_v2x_data.clear()
             for parking in self.parkings:
-                parking.update(self.car)
-                parking.draw(self.screen)
-                if parking.is_in_range(self.car):
-                    temp_v2x_data.append((id(parking), parking.data))
+                for user_car in self.cars:
+                    parking.update(user_car)
+                    parking.draw(self.screen)
+                    if parking.is_in_range(user_car):
+                        temp_v2x_data.append((id(parking), parking.data))
 
             self.wall_group.update()
             self.crosswalk_group.update()
             self.crosswalk_group.draw(self.screen)
 
             for crosswalk in self.crosswalk_group:
-                if crosswalk.is_in_range(self.car):
-                    temp_v2x_data.append((id(crosswalk), crosswalk.data))
+                for user_car in self.cars:
+                    if crosswalk.is_in_range(user_car):
+                        temp_v2x_data.append((id(crosswalk), crosswalk.data))
             new_dict = dict()
 
             for traffic_sign in self.traffic_signs:
@@ -217,22 +229,24 @@ class Game:
                 temp_v2x_data.append((id(traffic_sign), traffic_sign.data))
 
             for school_zone in self.school_zones:
-                check_speed = school_zone.update(self.car)
-                if check_speed is False:
-                    self.car_update = False
-                    self.win_condition = False
-                    self.car.image = pygame.image.load('images/collision.png')
-                    self.car.MAX_FORWARD_SPEED = 0
-                    self.car.MAX_REVERSE_SPEED = 0
-                    self.car.k_right = 0
-                    self.car.k_left = 0
-                school_zone.draw(self.screen)
-                temp_v2x_data.append((id(school_zone), school_zone.data))
+                for user_car in self.cars:
+                    check_speed = school_zone.update(user_car)
+                    if check_speed is False:
+                        self.car_update = False
+                        self.win_condition = False
+                        user_car.image = pygame.image.load('images/collision.png')
+                        user_car.MAX_FORWARD_SPEED = 0
+                        user_car.MAX_REVERSE_SPEED = 0
+                        user_car.k_right = 0
+                        user_car.k_left = 0
+                    school_zone.draw(self.screen)
+                    temp_v2x_data.append((id(school_zone), school_zone.data))
 
             for v2x_data in temp_v2x_data:
                 key, value = v2x_data
                 new_dict[key] = value
-            self.database.v2x_data = new_dict
+            for database in self.databases:
+                database.v2x_data = new_dict
             # print(self.database.v2x_data)
             self.wall_group.draw(self.screen)
             self.car_group.draw(self.screen)
@@ -245,24 +259,26 @@ class Game:
             if dynamic_collisions != {}:
                 self.car_update = False
                 self.win_condition = False
-                self.car.image = pygame.image.load('images/collision.png')
-                self.car.MAX_FORWARD_SPEED = 0
-                self.car.MAX_REVERSE_SPEED = 0
-                self.car.k_right = 0
-                self.car.k_left = 0
+                for user_car in self.cars:
+                    user_car.image = pygame.image.load('images/collision.png')
+                    user_car.MAX_FORWARD_SPEED = 0
+                    user_car.MAX_REVERSE_SPEED = 0
+                    user_car.k_right = 0
+                    user_car.k_left = 0
 
             if self.school_zones != []:
-                if (250 <= self.car.position[0] < 250 + 550) and (350 <= self.car.position[1] < 350 + 100) & (
-                        self.dynamic_flag == False):
-                    if self.dynamic.x == -100:
-                        self.dynamic.x = random.randint(250, 600)
-                    if 0 <= self.car.position[0] - self.dynamic.x <= 100:
-                        if self.dynamic.time == 0:
-                            self.dynamic.time = time.time()
-                        if time.time() - self.dynamic.time < 5:
-                            self.dynamic.draw(self.screen)
-                        else:
-                            self.dynamic.x = -100
+                for user_car in self.cars:
+                    if (250 <= user_car.position[0] < 250 + 550) and (350 <= user_car.position[1] < 350 + 100) & (
+                            self.dynamic_flag == False):
+                        if self.dynamic.x == -100:
+                            self.dynamic.x = random.randint(250, 600)
+                        if 0 <= user_car.position[0] - self.dynamic.x <= 100:
+                            if self.dynamic.time == 0:
+                                self.dynamic.time = time.time()
+                            if time.time() - self.dynamic.time < 5:
+                                self.dynamic.draw(self.screen)
+                            else:
+                                self.dynamic.x = -100
 
             # Counter Render
             pygame.display.flip()
@@ -274,113 +290,115 @@ class Game:
         self.run(auto=auto)
 
     def make_lidar_data(self):
-        lidar_data = np.zeros((360))
-        L = 100
-        array = pygame.surfarray.array3d(self.screen)
-        car = self.database.car
-        x, y = car.position
+        for idx, database in enumerate(self.databases):
+            lidar_data = np.zeros((360))
+            L = 100
+            array = pygame.surfarray.array3d(self.screen)
 
-        car_direction = car.direction % 360
+            user_car = database.car
+            x, y = user_car.position
 
-        lidar_x = int(x - 20 * math.sin(math.pi * car_direction / 180))
-        lidar_y = int(y - 20 * math.cos(math.pi * car_direction / 180))
+            car_direction = user_car.direction % 360
 
-        for direction in range(-90 + car_direction, 90 + car_direction):
-            direction = direction % 360
+            lidar_x = int(x - 20 * math.sin(math.pi * car_direction / 180))
+            lidar_y = int(y - 20 * math.cos(math.pi * car_direction / 180))
 
-            x, y = lidar_x, lidar_y
-            m = math.tan(math.pi * direction / 180)
-            if direction == 0:
-                while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
-                    x = x
-                    y -= 1
-                    try:
-                        if (array[int(x)][int(y)] == 255).all():
-                            break
-                    except IndexError:
-                        break
-            elif (0 < direction < 45) or (315 <= direction < 360):
-                while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
-                    y -= 1
-                    x = (m) * (y - lidar_y) + lidar_x
-                    try:
-                        if (array[int(x)][int(y)] == 255).all():
-                            break
-                    except IndexError:
-                        break
-            elif (45 <= direction < 90) or (90 < direction < 135):
-                while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
-                    x -= 1
-                    y = (1 / m) * (x - lidar_x) + lidar_y
-                    try:
-                        if (array[int(x)][int(y)] == 255).all():
-                            break
-                    except IndexError:
-                        break
-            elif direction == 90:
-                while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
-                    x -= 1
-                    y = y
-                    try:
-                        if (array[int(x)][int(y)] == 255).all():
-                            break
-                    except IndexError:
-                        break
-            elif (135 <= direction < 180) or (180 < direction < 225):
-                while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
-                    y += 1
-                    x = (m) * (y - lidar_y) + lidar_x
-                    try:
-                        if (array[int(x)][int(y)] == 255).all():
-                            break
-                    except IndexError:
-                        break
-            elif direction == 180:
-                while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
-                    x = x
-                    y += 1
-                    try:
-                        if (array[int(x)][int(y)] == 255).all():
-                            break
-                    except IndexError:
-                        break
-            elif (225 <= direction < 270) or (270 < direction < 315):
-                while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
-                    x += 1
-                    y = (1 / m) * (x - lidar_x) + lidar_y
-                    try:
-                        if (array[int(x)][int(y)] == 255).all():
-                            break
-                    except IndexError:
-                        break
-            elif direction == 270:
-                while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
-                    x += 1
-                    y = y
-                    try:
-                        if (array[int(x)][int(y)] == 255).all():
-                            break
-                    except IndexError:
-                        break
-            else:
-                print(f"Uncatched Case: {direction}")
+            for direction in range(-90 + car_direction, 90 + car_direction):
+                direction = direction % 360
 
-            length = math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2)
-            if length > L:
-                length = L
+                x, y = lidar_x, lidar_y
+                m = math.tan(math.pi * direction / 180)
+                if direction == 0:
+                    while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
+                        x = x
+                        y -= 1
+                        try:
+                            if (array[int(x)][int(y)] == 255).all():
+                                break
+                        except IndexError:
+                            break
+                elif (0 < direction < 45) or (315 <= direction < 360):
+                    while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
+                        y -= 1
+                        x = (m) * (y - lidar_y) + lidar_x
+                        try:
+                            if (array[int(x)][int(y)] == 255).all():
+                                break
+                        except IndexError:
+                            break
+                elif (45 <= direction < 90) or (90 < direction < 135):
+                    while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
+                        x -= 1
+                        y = (1 / m) * (x - lidar_x) + lidar_y
+                        try:
+                            if (array[int(x)][int(y)] == 255).all():
+                                break
+                        except IndexError:
+                            break
+                elif direction == 90:
+                    while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
+                        x -= 1
+                        y = y
+                        try:
+                            if (array[int(x)][int(y)] == 255).all():
+                                break
+                        except IndexError:
+                            break
+                elif (135 <= direction < 180) or (180 < direction < 225):
+                    while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
+                        y += 1
+                        x = (m) * (y - lidar_y) + lidar_x
+                        try:
+                            if (array[int(x)][int(y)] == 255).all():
+                                break
+                        except IndexError:
+                            break
+                elif direction == 180:
+                    while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
+                        x = x
+                        y += 1
+                        try:
+                            if (array[int(x)][int(y)] == 255).all():
+                                break
+                        except IndexError:
+                            break
+                elif (225 <= direction < 270) or (270 < direction < 315):
+                    while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
+                        x += 1
+                        y = (1 / m) * (x - lidar_x) + lidar_y
+                        try:
+                            if (array[int(x)][int(y)] == 255).all():
+                                break
+                        except IndexError:
+                            break
+                elif direction == 270:
+                    while (math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2) < L):
+                        x += 1
+                        y = y
+                        try:
+                            if (array[int(x)][int(y)] == 255).all():
+                                break
+                        except IndexError:
+                            break
+                else:
+                    print(f"Uncatched Case: {direction}")
 
-            lidar_data[direction] = length
+                length = math.sqrt((x - lidar_x) ** 2 + (y - lidar_y) ** 2)
+                if length > L:
+                    length = L
 
-        lidar_data = np.concatenate(
-            (lidar_data[-90:], lidar_data[:270]), axis=None
-        )
-        lidar_data = np.concatenate(
-            (lidar_data, lidar_data), axis=None
-        )
-        lidar_data = \
-            lidar_data[self.car.direction % 360:
-                       self.car.direction % 360 + 180]
-        self.database.lidar.data = lidar_data
+                lidar_data[direction] = length
+
+            lidar_data = np.concatenate(
+                (lidar_data[-90:], lidar_data[:270]), axis=None
+            )
+            lidar_data = np.concatenate(
+                (lidar_data, lidar_data), axis=None
+            )
+            lidar_data = \
+                lidar_data[user_car.direction % 360:
+                           user_car.direction % 360 + 180]
+            database.lidar.data = lidar_data
 
 
 if __name__ == "__main__":

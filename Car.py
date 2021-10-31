@@ -5,6 +5,9 @@ import sys
 import platform
 import os
 
+from pygame.locals import (K_DOWN, K_ESCAPE, K_LEFT, K_RIGHT, K_SPACE, K_UP,
+                           KEYDOWN, USEREVENT, K_w, K_a, K_s, K_d)
+
 from Authority import AuthorityExecption
 
 
@@ -12,16 +15,21 @@ class CarSprite(pygame.sprite.Sprite):
     __MAX_FORWARD_SPEED = 15
     __MAX_REVERSE_SPEED = 15
 
-    def __init__(self, image, position, direction=0):
+    def __init__(self, image, position, direction=0, player=1):
         pygame.sprite.Sprite.__init__(self)
         self.__src_image = pygame.image.load(image)
         self.__position = position
         self.__speed = 0
         self.__k_left = self.__k_right = self.__k_down = self.__k_up = 0
         self.__direction = direction
+        self.player = player
+        self.event_keys = [K_RIGHT, K_LEFT, K_UP, K_DOWN]
+        if player == 2:
+            self.event_keys = [K_d, K_a, K_w, K_s]
         self.update()
 
     def update(self, deltat=False):
+        print(self.player)
         # SIMULATION
         self.__speed += (self.__k_up + self.__k_down)
         if self.__speed > self.__MAX_FORWARD_SPEED:
