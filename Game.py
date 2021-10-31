@@ -112,7 +112,7 @@ class Game:
                         continue
                     down = event.type == KEYDOWN
                     if self.win_condition is None:
-                        car_idx = 1 + event.key in self.event_keys[4:]  # if 0~3(True): 1st car, 4~7, 2nd car(False)
+                        car_idx = event.key in self.event_keys[4:]  # if 0~3(True): 1st car, 4~7, 2nd car(False)
                         if event.key == self.event_keys[0] or event.key == self.event_keys[4]:
                             self.cars[car_idx].k_right = down * -5
                         elif event.key == self.event_keys[1] or event.key == self.event_keys[5]:
