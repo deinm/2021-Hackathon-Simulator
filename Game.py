@@ -70,13 +70,15 @@ class Game:
             if auto:
                 for user_car in self.cars:
                     user_car.k_right = user_car.k_lefy = user_car.k_up = user_car.k_down = 0
+
             for event in events:
-                if not hasattr(event, 'key'):
+                if not hasattr(event, 'key') or \
+                    (auto and
+                     event.type != USEREVENT and 
+                     event.key in self.event_keys):
                     continue
-                
+
                 if auto:
-                    if event.type != USEREVENT and event.key in self.event_keys:
-                        continue
                     if self.win_condition is None:
                         car_idx = event.key in self.event_keys[4:]  # if 0~3(True): 1st car, 4~7, 2nd car(False)
                         if event.key == self.event_keys[0] or event.key == self.event_keys[4]:
