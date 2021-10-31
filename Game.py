@@ -5,7 +5,7 @@ import random
 import numpy as np
 import pygame
 from pygame.locals import (K_DOWN, K_ESCAPE, K_LEFT, K_RIGHT, K_SPACE, K_UP,
-                           KEYDOWN, USEREVENT)
+                           KEYDOWN, USEREVENT, K_w, K_a, K_s, K_d)
 
 from Car import CarSprite
 from Trophy import TrophySprite
@@ -15,8 +15,8 @@ from Dynamic import Dynamic
 
 class Game:
     def __init__(self, walls, trophies, parkings,
-                 crosswalks, traffic_signs, schoolzone, car, database):
-        self.init_args =\
+                 crosswalks, traffic_signs, schoolzone, car, database, player):
+        self.init_args = \
             [
                 copy.copy(walls),
                 copy.copy(trophies),
@@ -45,9 +45,13 @@ class Game:
         self.stop = False
         self.car_update = True
         self.database = database
-        self.dynamic_flag=False
-        self.dynamic = Dynamic('images/bird.png',(-100,0))
+        self.dynamic_flag = False
+        self.dynamic = Dynamic('images/bird.png', (-100, 0))
         self.dynamic_group = pygame.sprite.RenderPlain(self.dynamic)
+        self.player = player
+        self.event_keys = [K_RIGHT, K_LEFT, K_UP, K_DOWN]
+        if self.player == 2:
+            self.event_keys = [K_d, K_a, K_w, K_s]
 
     def run(self, auto=False):
         seconds = 0
@@ -66,30 +70,25 @@ class Game:
                     print("Total time:", result)
             events = pygame.event.get()
             if auto:
-                self.car.k_right = self.car.k_left =\
+                self.car.k_right = self.car.k_left = \
                     self.car.k_up = self.car.k_down = 0
             for event in events:
                 if auto:
                     if not hasattr(event, 'key'):
                         continue
-                    if event.type != USEREVENT and (
-                            event.key == K_RIGHT or
-                            event.key == K_LEFT or
-                            event.key == K_UP or
-                            event.key == K_DOWN
-                            ):
+                    if event.type != USEREVENT and event.key in self.event_keys:
                         continue
                     if self.win_condition is None:
-                        if event.key == K_RIGHT:
+                        if event.key == self.event_keys[0]:
                             if self.car.k_right > -8:
                                 self.car.k_right += -1
-                        elif event.key == K_LEFT:
+                        elif event.key == self.event_keys[1]:
                             if self.car.k_left < 8:
                                 self.car.k_left += 1
-                        elif event.key == K_UP:
+                        elif event.key == self.event_keys[2]:
                             if self.car.k_up < 5:
                                 self.car.k_up += 1
-                        elif event.key == K_DOWN:
+                        elif event.key == self.event_keys[3]:
                             if self.car.k_down > -5:
                                 self.car.k_down += -1
                         elif event.key == K_ESCAPE:
@@ -111,13 +110,13 @@ class Game:
                         continue
                     down = event.type == KEYDOWN
                     if self.win_condition is None:
-                        if event.key == K_RIGHT:
+                        if event.key == self.event_keys[0]:
                             self.car.k_right = down * -5
-                        elif event.key == K_LEFT:
+                        elif event.key == self.event_keys[1]:
                             self.car.k_left = down * 5
-                        elif event.key == K_UP:
+                        elif event.key == self.event_keys[2]:
                             self.car.k_up = down * 2
-                        elif event.key == K_DOWN:
+                        elif event.key == self.event_keys[3]:
                             self.car.k_down = down * -2
                         elif event.key == K_ESCAPE:
                             self.database.stop = True
@@ -138,7 +137,6 @@ class Game:
             if self.database.stop:
                 break
 
-
             # RENDERING
             self.screen.fill((0, 0, 0))
             if self.car_update:
@@ -156,19 +154,19 @@ class Game:
                 self.car.k_left = 0
 
             crosswalk_collisions = pygame.sprite.groupcollide(
-                    self.car_group,
-                    self.crosswalk_group,
-                    False,
-                    False,
-                    collided=None
-                )
+                self.car_group,
+                self.crosswalk_group,
+                False,
+                False,
+                collided=None
+            )
 
             trophy_collision = pygame.sprite.groupcollide(
-                    self.car_group,
-                    self.trophy_group,
-                    False,
-                    True
-                )
+                self.car_group,
+                self.trophy_group,
+                False,
+                True
+            )
 
             for colled_crosswalk in crosswalk_collisions.values():
                 if colled_crosswalk[0].color == "red":
@@ -242,7 +240,7 @@ class Game:
 
             # Dynamic Obstacle
             dynamic_collisions = pygame.sprite.groupcollide(
-                self.car_group, self.dynamic_group, False,False,collided=pygame.sprite.collide_rect_ratio(1))
+                self.car_group, self.dynamic_group, False, False, collided=pygame.sprite.collide_rect_ratio(1))
             self.dynamic_group.update(dynamic_collisions)
             if dynamic_collisions != {}:
                 self.car_update = False
@@ -254,10 +252,11 @@ class Game:
                 self.car.k_left = 0
 
             if self.school_zones != []:
-                if (250 <= self.car.position[0] < 250 + 550) and (350 <= self.car.position[1] < 350 + 100) & (self.dynamic_flag==False):
+                if (250 <= self.car.position[0] < 250 + 550) and (350 <= self.car.position[1] < 350 + 100) & (
+                        self.dynamic_flag == False):
                     if self.dynamic.x == -100:
-                        self.dynamic.x = random.randint(250,600)
-                    if 0<=self.car.position[0]-self.dynamic.x<=100:
+                        self.dynamic.x = random.randint(250, 600)
+                    if 0 <= self.car.position[0] - self.dynamic.x <= 100:
                         if self.dynamic.time == 0:
                             self.dynamic.time = time.time()
                         if time.time() - self.dynamic.time < 5:
@@ -374,11 +373,11 @@ class Game:
 
         lidar_data = np.concatenate(
             (lidar_data[-90:], lidar_data[:270]), axis=None
-            )
+        )
         lidar_data = np.concatenate(
             (lidar_data, lidar_data), axis=None
-            )
-        lidar_data =\
+        )
+        lidar_data = \
             lidar_data[self.car.direction % 360:
                        self.car.direction % 360 + 180]
         self.database.lidar.data = lidar_data
