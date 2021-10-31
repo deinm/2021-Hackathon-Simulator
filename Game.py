@@ -153,7 +153,7 @@ class Game:
             if collisions != {}:
                 self.car_update = False
                 self.win_condition = False
-                crashed_cars = [car.player for car in list(collisions.keys())]
+                crashed_cars = [user_car.player for user_car in list(collisions.keys())]
                 for crashed_car_idx in crashed_cars:
                     user_car = self.cars[crashed_car_idx - 1]
                     user_car.image = pygame.image.load('images/collision.png')
@@ -181,7 +181,10 @@ class Game:
                 if colled_crosswalk[0].color == "red":
                     self.car_update = False
                     self.win_condition = False
-                    for user_car in self.cars:
+
+                    crashed_cars = [user_car.player for user_car in list(collisions.keys())]
+                    for crashed_car_idx in crashed_cars:
+                        user_car = self.cars[crashed_car_idx - 1]
                         user_car.image = pygame.image.load('images/collision.png')
                         user_car.MAX_FORWARD_SPEED = 0
                         user_car.MAX_REVERSE_SPEED = 0
@@ -236,11 +239,13 @@ class Game:
                     if check_speed is False:
                         self.car_update = False
                         self.win_condition = False
+
                         user_car.image = pygame.image.load('images/collision.png')
                         user_car.MAX_FORWARD_SPEED = 0
                         user_car.MAX_REVERSE_SPEED = 0
                         user_car.k_right = 0
                         user_car.k_left = 0
+
                     school_zone.draw(self.screen)
                     temp_v2x_data.append((id(school_zone), school_zone.data))
 
@@ -261,8 +266,10 @@ class Game:
             if dynamic_collisions != {}:
                 self.car_update = False
                 self.win_condition = False
-                for user_car in self.cars:
-                    print("!")
+
+                crashed_cars = [user_car.player for user_car in list(collisions.keys())]
+                for crashed_car_idx in crashed_cars:
+                    user_car = self.cars[crashed_car_idx - 1]
                     user_car.image = pygame.image.load('images/collision.png')
                     user_car.MAX_FORWARD_SPEED = 0
                     user_car.MAX_REVERSE_SPEED = 0
