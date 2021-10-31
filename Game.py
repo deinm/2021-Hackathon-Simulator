@@ -189,6 +189,9 @@ class Game:
                     user_car.k_left = 0
 
             if trophy_collision != {}:
+                trophy_collision_car_idx = list(trophy_collision.keys())[0].player
+                print(f"Player {trophy_collision_car_idx} won the trophy")
+
                 all_parking_done = True
                 for parking in self.parkings:
                     if not parking.mission_complete:
