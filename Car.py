@@ -5,6 +5,9 @@ import sys
 import platform
 import os
 
+from pygame.locals import (K_DOWN, K_ESCAPE, K_LEFT, K_RIGHT, K_SPACE, K_UP,
+                           KEYDOWN, USEREVENT, K_w, K_a, K_s, K_d)
+
 from Authority import AuthorityExecption
 
 
@@ -12,13 +15,21 @@ class CarSprite(pygame.sprite.Sprite):
     __MAX_FORWARD_SPEED = 15
     __MAX_REVERSE_SPEED = 15
 
-    def __init__(self, image, position, direction=0):
+    def __init__(self, image, position, direction=0, player=1):
         pygame.sprite.Sprite.__init__(self)
         self.__src_image = pygame.image.load(image)
+        self.car_image = pygame.image.load(image)
         self.__position = position
         self.__speed = 0
         self.__k_left = self.__k_right = self.__k_down = self.__k_up = 0
         self.__direction = direction
+        self.player = player
+        self.event_keys = [K_RIGHT, K_LEFT, K_UP, K_DOWN]
+        self.initial_direction = direction
+        self.initial_position = position
+        self.last_collision = 999
+        if player == 2:
+            self.event_keys = [K_d, K_a, K_w, K_s]
         self.update()
 
     def update(self, deltat=False):
@@ -28,9 +39,13 @@ class CarSprite(pygame.sprite.Sprite):
             self.__speed = self.__MAX_FORWARD_SPEED
         if self.__speed < -self.__MAX_REVERSE_SPEED:
             self.__speed = -self.__MAX_REVERSE_SPEED
+<<<<<<< HEAD
         if self.__speed == 0:
             pass
         else:
+=======
+        if self.__speed != 0:
+>>>>>>> feature/2players
             self.__direction += (self.__k_right + self.__k_left)
         x, y = (self.__position)
         rad = self.__direction * math.pi / 180
@@ -41,6 +56,20 @@ class CarSprite(pygame.sprite.Sprite):
             pygame.transform.rotate(self.__src_image, self.__direction)
         self.rect = self.image.get_rect()
         self.rect.center = self.__position
+    
+    def respawn(self):
+        self.__speed = 0
+        self.__direction = self.initial_direction
+        self.__k_left = self.__k_right = self.__k_down = self.__k_up = 0
+        self.__position = self.initial_position        
+        self.__src_image = self.car_image
+        self.last_collision = 999
+        self.update()
+    
+    def crash(self, collide_seconds: int, crash_image):
+        self.__src_image = crash_image
+        self.last_collision = collide_seconds
+        self.update()
 
     @property
     def MAX_FORWARD_SPEED(self):
