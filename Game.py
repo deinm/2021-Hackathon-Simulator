@@ -207,7 +207,7 @@ class Game:
                 # trophy respawn
                 self.trophy_group.sprites()[0].trophy_respawn()
 
-            print(temp_v2x_data)
+            # print(temp_v2x_data)
             temp_v2x_data.clear()
             temp_v2x_data.append((self.trophy_group.sprites()[0].data))
 
