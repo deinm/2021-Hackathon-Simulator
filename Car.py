@@ -39,13 +39,7 @@ class CarSprite(pygame.sprite.Sprite):
             self.__speed = self.__MAX_FORWARD_SPEED
         if self.__speed < -self.__MAX_REVERSE_SPEED:
             self.__speed = -self.__MAX_REVERSE_SPEED
-<<<<<<< Updated upstream
         if self.__speed != 0:
-=======
-        if self.__speed == 0:
-            pass
-        else:
->>>>>>> Stashed changes
             self.__direction += (self.__k_right + self.__k_left)
             self.__direction = self.__direction % 360
         x, y = (self.__position)
