@@ -37,7 +37,9 @@ class Game:
         self.win_condition = None
         self.win_text = font.render('', True, (0, 255, 0))
         self.loss_text = font.render('', True, (255, 0, 0))
+        self.walls = walls
         self.wall_group = pygame.sprite.RenderPlain(*walls)
+        self.trophies = trophies
         self.trophy_group = pygame.sprite.RenderPlain(*trophies)
         self.crosswalk_group = pygame.sprite.RenderPlain(*crosswalks)
         self.car_group = pygame.sprite.RenderPlain(*cars)
@@ -51,6 +53,7 @@ class Game:
         self.dynamic_group = pygame.sprite.RenderPlain(self.dynamic)
         self.event_keys = [K_RIGHT, K_LEFT, K_UP, K_DOWN,
                            K_d, K_a, K_w, K_s]
+        self.trophy_count = [0, 0]
 
     def run(self, auto=False):
         seconds = 0
@@ -170,7 +173,7 @@ class Game:
                 self.car_group,
                 self.trophy_group,
                 False,
-                True
+                False
             )
 
             for user_car, colled_crosswalk in crosswalk_collisions.items():
@@ -184,28 +187,15 @@ class Game:
                     user_car.k_right = 0
                     user_car.k_left = 0
 
+            # trophy 먹었을 때
             if trophy_collision != {}:
                 trophy_collision_car_idx = list(trophy_collision.keys())[0].player
+                self.trophy_count[trophy_collision_car_idx-1] += 1
                 print(f"Player {trophy_collision_car_idx} won the trophy")
-
-                all_parking_done = True
-                for parking in self.parkings:
-                    if not parking.mission_complete:
-                        all_parking_done = False
-                        break
-
-                if all_parking_done:
-                    self.car_update = False
-                    self.win_condition = True
-                else:
-                    self.car_update = False
-                    self.win_condition = False
-                for user_car in self.cars:
-                    user_car.MAX_FORWARD_SPEED = 0
-                    user_car.MAX_REVERSE_SPEED = 0
-                if self.win_condition is True:
-                    for user_car in self.cars:
-                        user_car.k_right = -5
+                print(self.trophy_count)
+                
+                # trophy respawn
+                self.trophies[0].trophy_respawn()
 
             temp_v2x_data.clear()
             for parking in self.parkings:
