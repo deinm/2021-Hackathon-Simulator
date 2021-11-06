@@ -31,10 +31,8 @@ class DynamicWallSprite(pygame.sprite.Sprite):
         
         if (int)(time.time() - self.time) % 2 == 1:
             self.rect.center = (-1000,-1000)
-            print("OFF")
         else:
             self.rect.center = self.initial_position
-            print("ON")
         pass
 
 
