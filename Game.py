@@ -300,7 +300,8 @@ class Game:
 
     def make_lidar_data(self):
         for idx, database in enumerate(self.databases):
-            lidar_data = np.zeros((360))
+            # lidar_data = np.zeros((360))
+            lidar_data = []
             L = 100
             array = pygame.surfarray.array3d(self.screen)
 
@@ -312,7 +313,7 @@ class Game:
             lidar_x = int(x - 20 * math.sin(math.pi * car_direction / 180))
             lidar_y = int(y - 20 * math.cos(math.pi * car_direction / 180))
 
-            for direction in range(-90 + car_direction, 90 + car_direction):
+            for direction in range(-90 + car_direction, 270 + car_direction):
                 direction = direction % 360
 
                 x, y = lidar_x, lidar_y
@@ -396,17 +397,18 @@ class Game:
                 if length > L:
                     length = L
 
-                lidar_data[direction] = length
+                # lidar_data[direction] = length
+                lidar_data.append(length)
 
-            lidar_data = np.concatenate(
-                (lidar_data[-90:], lidar_data[:270]), axis=None
-            )
-            lidar_data = np.concatenate(
-                (lidar_data, lidar_data), axis=None
-            )
-            lidar_data = \
-                lidar_data[user_car.direction % 360:
-                           user_car.direction % 360 + 180]
+            # lidar_data = np.concatenate(
+            #     (lidar_data[-90:], lidar_data[:270]), axis=None
+            # )
+            # lidar_data = np.concatenate(
+            #     (lidar_data, lidar_data), axis=None
+            # )
+            # lidar_data = \
+            #     lidar_data[user_car.direction % 360:
+            #                user_car.direction % 360 + 360]
             database.lidar.data = lidar_data
 
 
