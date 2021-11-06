@@ -16,6 +16,7 @@ from Dynamic import Dynamic
 
 class Game:
     WIN_SCORE = 10
+    TIME_LIMIT = 180 # seconds
 
     def __init__(self, walls, trophies, parkings,
                  crosswalks, traffic_signs, schoolzone, cars: Iterable[CarSprite], databases):
@@ -56,17 +57,20 @@ class Game:
         self.event_keys = [K_RIGHT, K_LEFT, K_UP, K_DOWN,
                            K_d, K_a, K_w, K_s]
         self.trophy_count = [0, 0]
+        self.timeout_flag = False
 
     def run(self, auto=False):
         seconds = 0
         record = False
         temp_v2x_data = []
         crashed_cars = []
+        initial_time = time.time()
         while True:
             deltat = self.clock.tick(30)
-            seconds += 0.03
+            seconds = time.time() - initial_time
 
-            seconds = round(seconds, 2)
+            if seconds >= self.TIME_LIMIT:
+                self.timeout_flag = True
 
             if self.win_condition is not None and not record:
                 record = True
@@ -194,15 +198,17 @@ class Game:
                 trophy_collision_car_idx = list(trophy_collision.keys())[0].player
                 self.trophy_count[trophy_collision_car_idx-1] += 1
                 print(f"Player {trophy_collision_car_idx} won the trophy")
+                print(self.timeout_flag)
                 print(self.trophy_count)
-                
+
+                if self.WIN_SCORE in self.trophy_count or self.timeout_flag:
+                    score_max = max(self.trophy_count)
+                    win_player = [player for player, score in enumerate(self.trophy_count) if score == score_max][0] + 1
+                    print(f"player {win_player} wins!")
+                    break
+
                 # trophy respawn
                 self.trophies[0].trophy_respawn()
-            
-            if self.WIN_SCORE in self.trophy_count:
-                win_player = [player for player, score in enumerate(self.trophy_count) if score == self.WIN_SCORE][0] + 1
-                print(f"player {win_player} wins!")
-                break
 
             temp_v2x_data.clear()
             for parking in self.parkings:
