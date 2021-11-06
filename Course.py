@@ -1,5 +1,4 @@
-from Wall import WallSprite
-from Wall import invisible_WallSprite
+from Wall import WallSprite, DynamicWallSprite, invisible_WallSprite
 from Car import CarSprite
 from Trophy import TrophySprite
 from Parking import Parking
@@ -16,29 +15,7 @@ Map1 = (
         WallSprite((500, 800), 1000, 4),
         WallSprite((0, 400), 4, 800),
         WallSprite((1000, 400), 4, 800),
-        WallSprite((450, 700), 900, 4),  # Horizontal line
-        WallSprite((550, 500), 900, 4),
-        WallSprite((450, 300), 900, 4),
-        WallSprite((535, 100), 930, 4),
-        WallSprite((910, 550), 180, 100),  # Static obstacle - Big
-        WallSprite((650, 650), 150, 100),
-        WallSprite((360, 550), 180, 100),
-        WallSprite((100, 650), 200, 100),
-        WallSprite((100, 440), 4, 120),  # Static obstacle - Small ver1
-        WallSprite((270, 360), 4, 120),
-        WallSprite((440, 440), 4, 120),
-        WallSprite((610, 360), 4, 120),
-        WallSprite((780, 440), 4, 120),
-        WallSprite((900, 360), 4, 120),
-        WallSprite((900, 230), 4, 140),  # Static obstacle - Small ver2
-        WallSprite((750, 170), 4, 140),
-        WallSprite((650, 230), 4, 140),
-        WallSprite((550, 170), 4, 140),
-        WallSprite((480, 230), 4, 140),
-        WallSprite((410, 170), 4, 140),
-        WallSprite((310, 230), 4, 140),
-        WallSprite((210, 170), 4, 140),
-        WallSprite((30, 230), 60, 140),
+        DynamicWallSprite((500, 500), 4, 200),
     ],
     [
         TrophySprite((930, 15))
