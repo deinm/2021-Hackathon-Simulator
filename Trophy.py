@@ -1,5 +1,6 @@
 import pygame
 import random as rd
+from V2X import V2X
 
 class TrophySprite(pygame.sprite.Sprite):
     def __init__(self):
@@ -14,6 +15,8 @@ class TrophySprite(pygame.sprite.Sprite):
         }
         self.rect.x, self.rect.y = (470, 375)
         self.idx = None
+        V2X.__init__(self, (self.rect.x, self.rect.y), name="Trophy")
+        self.data = [self.name, (self.rect.x, self.rect.y)]
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -24,3 +27,7 @@ class TrophySprite(pygame.sprite.Sprite):
             rd_idx_list.remove(self.idx)
         self.idx = rd.choice(rd_idx_list)
         self.rect.x, self.rect.y = rd.choice(self.position_dict[self.idx])
+        self.update()
+
+    def update(self):
+        self.data = [self.name,(self.rect.x, self.rect.y)]

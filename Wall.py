@@ -27,13 +27,21 @@ class DynamicWallSprite(pygame.sprite.Sprite):
         self.rect.center = position
         self.image = self.normal
         self.time = time.time()
+
     def update(self):
-        
-        if (int)(time.time() - self.time) % 2 == 1:
-            self.rect.center = (-1000,-1000)
-        else:
+        elpased_time = (time.time() - self.time)
+        tik = (int)(elpased_time * 100) % 100
+        if  (int)(elpased_time % 4) == 0:
             self.rect.center = self.initial_position
-        pass
+        if  (int)(elpased_time % 4) == 2: 
+            self.rect.center = (600,600)    
+        if  (int)(elpased_time % 4) == 1:
+            print("move")
+            self.rect.center = (500+tik,500+tik)
+        if  (int)(elpased_time % 4) == 3:
+            print("move")
+            self.rect.center = (600-tik, 600-tik)
+        
 
 
 

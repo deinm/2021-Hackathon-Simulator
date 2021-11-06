@@ -40,9 +40,7 @@ class Game:
         self.win_condition = None
         self.win_text = font.render('', True, (0, 255, 0))
         self.loss_text = font.render('', True, (255, 0, 0))
-        self.walls = walls
         self.wall_group = pygame.sprite.RenderPlain(*walls)
-        self.trophies = trophies
         self.trophy_group = pygame.sprite.RenderPlain(*trophies)
         self.crosswalk_group = pygame.sprite.RenderPlain(*crosswalks)
         self.car_group = pygame.sprite.RenderPlain(*cars)
@@ -207,9 +205,12 @@ class Game:
                     break
 
                 # trophy respawn
-                self.trophies[0].trophy_respawn()
+                self.trophy_group.sprites()[0].trophy_respawn()
 
+            print(temp_v2x_data)
             temp_v2x_data.clear()
+            temp_v2x_data.append((self.trophy_group.sprites()[0].data))
+
             for parking in self.parkings:
                 for user_car in self.cars:
                     parking.update(user_car)
