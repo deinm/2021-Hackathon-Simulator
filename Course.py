@@ -20,10 +20,20 @@ Map1 = (
         WallSprite((100, 738), 4, 124),
 
         WallSprite((100, 210), 200, 4),
-        WallSprite((100, 580), 200, 4),
+        WallSprite((100, 590), 200, 4),
         
-        WallSprite((200, 325), 200, 50),
-        WallSprite((200, 465), 200, 50),
+        WallSprite((202, 325), 204, 50),
+        WallSprite((202, 475), 204, 50),
+
+        WallSprite((302, 200), 4, 200),
+        WallSprite((302, 600), 4, 200),
+
+        WallSprite((350, 98), 100, 4),
+        WallSprite((402, 625), 4, 350),
+        WallSprite((450, 450), 100, 4),
+
+        WallSprite((450, 275), 100, 150),
+        WallSprite((498, 100), 4, 200),
 
         # WallSprite((450, 700), 4, 200),
         # WallSprite((510, 550), 4, 100),
