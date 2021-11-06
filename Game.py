@@ -15,6 +15,8 @@ from Dynamic import Dynamic
 
 
 class Game:
+    WIN_SCORE = 10
+
     def __init__(self, walls, trophies, parkings,
                  crosswalks, traffic_signs, schoolzone, cars: Iterable[CarSprite], databases):
         self.init_args = \
@@ -196,6 +198,11 @@ class Game:
                 
                 # trophy respawn
                 self.trophies[0].trophy_respawn()
+            
+            if self.WIN_SCORE in self.trophy_count:
+                win_player = [player for player, score in enumerate(self.trophy_count) if score == self.WIN_SCORE][0] + 1
+                print(f"player {win_player} wins!")
+                break
 
             temp_v2x_data.clear()
             for parking in self.parkings:
