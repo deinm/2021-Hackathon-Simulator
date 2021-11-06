@@ -2,8 +2,6 @@ import pygame
 import numpy as np
 import time
 
-
-
 class WallSprite(pygame.sprite.Sprite):
 
     def __init__(self, position, width, height):

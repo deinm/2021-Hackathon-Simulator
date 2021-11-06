@@ -46,7 +46,7 @@ if __name__ == "__main__":
             "--auto",
             help="Do not use your keyboard command,\
                  but use pre-defined brain's command.",
-            action="store_true", default=False
+            action="store_true", default=True
         )
     args = parser.parse_args()
     main(args.auto)

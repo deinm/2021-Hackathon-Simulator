@@ -58,10 +58,8 @@ class Brain:
             # EXAMPLE CODE1: 속도 2로 유지하면서 오른쪽으로 회전하기
             self.right()
 
-            if self.database.car.speed <= 2:
-                self.up()
-            elif self.database.car.speed > 3:
-                self.down()
+            self.const_speed(3)
+            print(self.database.car.speed)
 
     def up(self, num: int = 1):
         for i in range(num):
@@ -78,3 +76,9 @@ class Brain:
     def left(self, num: int = 1):
         for i in range(num):
             self.database.control.left()
+
+    def const_speed(self, my_speed):
+        if self.database.car.speed <= my_speed-1:
+            self.up()
+        elif self.database.car.speed > my_speed:
+            self.down()
