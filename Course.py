@@ -18,7 +18,7 @@ Map1 = (
         DynamicWallSprite((500, 500), 4, 200),
     ],
     [
-        TrophySprite((930, 15))
+        TrophySprite()
     ],
     [
 
@@ -63,7 +63,7 @@ Map2 = (
         WallSprite((1000, 400), 4, 800),
     ],
     [
-        TrophySprite((745, 230))
+        TrophySprite()
     ],
     [
         Parking((450, 500), 60, 100),
@@ -125,7 +125,7 @@ Map3 = (
         invisible_WallSprite((800, 685), 4, 225),
     ],
     [
-        TrophySprite((920, 270))
+        TrophySprite()
     ],
     [
 
