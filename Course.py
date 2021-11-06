@@ -29,7 +29,9 @@ Map1 = (
         # WallSprite((510, 550), 4, 100),
         # WallSprite((510, 550), 4, 100),
 
-        # DynamicWallSprite((500, 500), 4, 200),
+        DynamicWallSprite((200, 150), (200, 65), 4, 125),
+        DynamicWallSprite((200, 643), (200, 738), 4, 125),
+        DynamicWallSprite((600, 500), (700, 575), 4, 125),
     ],
     [
         TrophySprite()
@@ -47,8 +49,8 @@ Map1 = (
 
     ],
     [
-        CarSprite('images/car.png', (50, 750), 270, player=1),
-        CarSprite('images/car.png', (30, 30), 90, player=2),
+        CarSprite('images/car.png', (50, 750), 0, player=1),
+        CarSprite('images/car.png', (50, 50), 180, player=2),
     ],
 )
 

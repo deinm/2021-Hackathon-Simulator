@@ -14,6 +14,7 @@ class Brain1:
             time.sleep(0.001)
             _ = pygame.event.get()
 
+            
             '''
             ☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
             ☆☆☆☆☆ DO NOT CHANGE ANOTHER CODE IN 2020-Hackathon-Simulator!!! ☆☆☆☆☆
