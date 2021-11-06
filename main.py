@@ -17,7 +17,6 @@ def main(auto):
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (500, 30)
     # _ = (Map1, Map2, Map3)
     walls, trophies, parkings, crosswalks, traffic_signs, schoolzone, cars = Map1
-    lidar = LiDAR()
 
     # Get LiDAR data, Set Control data
     brains = []
@@ -25,7 +24,7 @@ def main(auto):
     # Get Control data Set LiDAR data
     for idx, car in enumerate(cars):
         control = Control(player=idx+1)
-        database = Database(lidar, control, car)
+        database = Database(LiDAR(), control, car)
         databases.append(database)
 
     brains.append(Brain1(databases[0]))
