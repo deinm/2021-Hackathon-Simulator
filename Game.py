@@ -146,7 +146,7 @@ class Game:
                 self.car_group.update(deltat)
             
             collisions = pygame.sprite.groupcollide(
-                self.car_group, self.wall_group, False, False, collided=pygame.sprite.collide_rect_ratio(0.9))
+                self.car_group, self.wall_group, False, False, collided=pygame.sprite.collide_rect_ratio(0.95))
 
             # 벽과 충돌했을 때
             if collisions != {}:
@@ -198,7 +198,6 @@ class Game:
                 trophy_collision_car_idx = list(trophy_collision.keys())[0].player
                 self.trophy_count[trophy_collision_car_idx-1] += 1
                 print(f"Player {trophy_collision_car_idx} won the trophy")
-                print(self.timeout_flag)
                 print(self.trophy_count)
 
                 if self.WIN_SCORE in self.trophy_count or self.timeout_flag:
