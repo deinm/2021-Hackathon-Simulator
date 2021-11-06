@@ -40,13 +40,16 @@ Map1 = (
         WallSprite((302, 600), 4, 200),
         WallSprite((350, 98), 100, 4),
         WallSprite((402, 625), 4, 350),
-        WallSprite((450, 450), 100, 4),
+        WallSprite((525, 450), 250, 4),
         WallSprite((450, 275), 100, 150),
         WallSprite((498, 100), 4, 200),
 
+        WallSprite((550, 675), 4, 250),
+        WallSprite((625, 125), 4, 250),
+
         DynamicWallSprite((200, 150), (200, 65), 4, 125),
-        DynamicWallSprite((200, 643), (200, 738), 4, 125),
-        DynamicWallSprite((650, 500), (752, 600), 4, 100),
+        DynamicWallSprite((200, 650), (200, 738), 4, 125),
+        DynamicWallSprite((650, 500), (650, 600), 4, 100),
     ],
     [
         TrophySprite()
