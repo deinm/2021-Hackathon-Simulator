@@ -58,7 +58,10 @@ Map1 = (
 
     ],
     [
-
+        Crosswalk((350, 450), 100, 4, interval=random.randint(20, 40), phase=0),
+        Crosswalk((100, 400), 4, 100, interval=random.randint(20, 40), phase=8),
+        Crosswalk((685, 180), 125, 4, interval=random.randint(20, 40), phase=24),
+        Crosswalk((940, 600), 125, 4, interval=random.randint(20, 40), phase=24),
     ],
     [
 
@@ -118,7 +121,12 @@ Map2 = (
         TrophySprite()
     ],
     [
+<<<<<<< Updated upstream
 
+=======
+        Parking((450, 500), 60, 100),
+        Parking((550, 100), 60, 100),
+>>>>>>> Stashed changes
     ],
     [
 
