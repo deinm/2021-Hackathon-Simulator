@@ -15,9 +15,9 @@ class TrophySprite(pygame.sprite.Sprite):
             3 : [(470, 15),(470, 375),(570, 220),(700, 515),(240, 220),(400, 615),(470, 715)],
         }
         # load trophy position from file.
-        position_filename = "INSERT FILENAME HERE"
+        position_filename = "trophies.json"
         with open(position_filename, "r") as f:
-            self.position_dict = json.loads(f)
+            self.position_dict = json.load(f)
         self.rect.x, self.rect.y = (470, 375)
         self.idx = None
         V2X.__init__(self, (self.rect.x, self.rect.y), name="Trophy")
