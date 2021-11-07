@@ -23,7 +23,7 @@ def main(auto):
     databases = []
     # Get Control data Set LiDAR data
     for idx, car in enumerate(cars):
-        control = Control(player=idx+1)
+        control = Control(player=car.player)
         database = Database(LiDAR(), control, car)
         databases.append(database)
 
@@ -32,7 +32,6 @@ def main(auto):
 
     game = Game(walls, trophies, parkings,
                 crosswalks, traffic_signs, schoolzone, cars, databases)
-
 
     if auto:
         brain_thread1 = threading.Thread(target=brains[0].run,)
