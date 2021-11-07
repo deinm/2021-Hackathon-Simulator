@@ -7,7 +7,7 @@ import pygame
 from Brain1 import Brain1
 from Brain2 import Brain2
 from Control import Control
-from Course import Map1, Map2, Map3
+from Course import Map1, Map2
 from Database import Database
 from Game import Game
 from LiDAR import LiDAR
