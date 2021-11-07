@@ -35,5 +35,10 @@
     `좌` : self.database.control.left()         OR          self.left(num)
     `우` : self.database.control.right()        OR          self.right(num)
 
+### Prerequisite
+```bash
+pip install -r requirements.txt
+```
+
 ### related repository
 Reference : https://github.com/tdostilio/Race_Game
