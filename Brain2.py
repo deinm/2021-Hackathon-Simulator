@@ -16,7 +16,7 @@ class Brain2:
 
             '''
             ☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
-            ☆☆☆☆☆ DO NOT CHANGE ANOTHER CODE IN 2020-Hackathon-Simulator!!! ☆☆☆☆☆
+            ☆☆☆☆☆ DO NOT CHANGE ANOTHER CODE IN 2021-Hackathon-Simulator!!! ☆☆☆☆☆
             ☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆ ONLY CHANGE Brain.py!!!☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
             ☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
 
@@ -55,7 +55,7 @@ class Brain2:
 
             # Implement Your Algorithm HERE!!
             # self.left()
-            # EXAMPLE CODE1: 속도 2로 유지하면서 오른쪽으로 회전하기
+            # EXAMPLE CODE1: 속도 3으로 유지하면서 오른쪽으로 회전하기
 
             if self.database.car.speed <= -3:
                 self.up()
