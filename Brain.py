@@ -2,7 +2,7 @@ import time
 import pygame
 
 
-class Brain2:
+class Brain:
     def __init__(self, database):
         self.database = database
 
@@ -14,6 +14,7 @@ class Brain2:
             time.sleep(0.001)
             _ = pygame.event.get()
 
+            
             '''
             ☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
             ☆☆☆☆☆ DO NOT CHANGE ANOTHER CODE IN 2021-Hackathon-Simulator!!! ☆☆☆☆☆
@@ -54,12 +55,13 @@ class Brain2:
             '''
 
             # Implement Your Algorithm HERE!!
-            # self.left()
-            # EXAMPLE CODE1: 속도 3으로 유지하면서 오른쪽으로 회전하기
 
-            if self.database.car.speed <= -3:
+            # EXAMPLE CODE1: 속도 3으로 유지하면서 오른쪽으로 회전하기
+            self.right()
+
+            if self.database.car.speed <= 2:
                 self.up()
-            elif self.database.car.speed > -2:
+            elif self.database.car.speed > 3:
                 self.down()
 
     def up(self, num: int = 1):

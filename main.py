@@ -4,10 +4,9 @@ import threading
 
 import pygame
 
-from Brain1 import Brain1
-from Brain2 import Brain2
+from Brain import Brain
 from Control import Control
-from Course import Map1, Map2, Map3
+from Course import Map1
 from Database import Database
 from Game import Game
 from LiDAR import LiDAR
@@ -27,17 +26,15 @@ def main(auto):
         database = Database(LiDAR(), control, car)
         databases.append(database)
 
-    brains.append(Brain1(databases[0]))
-    brains.append(Brain2(databases[1]))
+    brains.append(Brain(database))
 
     game = Game(walls, trophies, parkings,
                 crosswalks, traffic_signs, schoolzone, cars, databases)
 
     if auto:
-        brain_thread1 = threading.Thread(target=brains[0].run,)
-        brain_thread2 = threading.Thread(target=brains[1].run,)
-        brain_thread1.start()
-        brain_thread2.start()
+        brain_thread = threading.Thread(target=brains[0].run)
+        brain_thread.start()
+        
     game.run(auto=auto)
     pygame.quit()
 

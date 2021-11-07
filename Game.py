@@ -52,8 +52,7 @@ class Game:
         self.dynamic_flag = False
         self.dynamic = Dynamic('images/bird.png', (-100, 0))
         self.dynamic_group = pygame.sprite.RenderPlain(self.dynamic)
-        self.event_keys = [K_RIGHT, K_LEFT, K_UP, K_DOWN,
-                           K_d, K_a, K_w, K_s]
+        self.event_keys = [K_RIGHT, K_LEFT, K_UP, K_DOWN]
         self.trophy_count = [0, 0]
         self.timeout_flag = False
 
@@ -75,13 +74,9 @@ class Game:
                 result = seconds
                 print("Total time:", result)
 
-            if self.timeout_flag and self.trophy_count[0] != self.trophy_count[1]:
+            if self.timeout_flag:
                 print("Timeout!")
-                print(f"Player 1 : {self.trophy_count[0]}\nPlayer 2 : {self.trophy_count[1]}")
-                if self.trophy_count[0] > self.trophy_count[1]:
-                    print("Player 1 wins!")
-                else:
-                    print("Player 2 wins!")
+                print(f"Player 1 : {self.trophy_count[0]}")
                 break
 
             # Car control
@@ -100,17 +95,17 @@ class Game:
 
                 if auto:
                     if self.win_condition is None:
-                        car_idx = event.key in self.event_keys[4:]  # if 0~3(True): 1st car, 4~7, 2nd car(False)
-                        if event.key == self.event_keys[0] or event.key == self.event_keys[4]:
+                        car_idx = 0
+                        if event.key == self.event_keys[0]:
                             if self.cars[car_idx].k_right > -8:
                                 self.cars[car_idx].k_right += -1
-                        elif event.key == self.event_keys[1] or event.key == self.event_keys[5]:
+                        elif event.key == self.event_keys[1]:
                             if self.cars[car_idx].k_left < 8:
                                 self.cars[car_idx].k_left += 1
-                        elif event.key == self.event_keys[2] or event.key == self.event_keys[6]:
+                        elif event.key == self.event_keys[2]:
                             if self.cars[car_idx].k_up < 5:
                                 self.cars[car_idx].k_up += 1
-                        elif event.key == self.event_keys[3] or event.key == self.event_keys[7]:
+                        elif event.key == self.event_keys[3]:
                             if self.cars[car_idx].k_down > -5:
                                 self.cars[car_idx].k_down += -1
                         elif event.key == K_ESCAPE:
@@ -118,14 +113,14 @@ class Game:
                 else:
                     down = event.type == KEYDOWN
                     if self.win_condition is None:
-                        car_idx = event.key in self.event_keys[4:]  # if 0~3(True): 1st car, 4~7, 2nd car(False)
-                        if event.key == self.event_keys[0] or event.key == self.event_keys[4]:
+                        car_idx = 0
+                        if event.key == self.event_keys[0]:
                             self.cars[car_idx].k_right = down * -5
-                        elif event.key == self.event_keys[1] or event.key == self.event_keys[5]:
+                        elif event.key == self.event_keys[1]:
                             self.cars[car_idx].k_left = down * 5
-                        elif event.key == self.event_keys[2] or event.key == self.event_keys[6]:
+                        elif event.key == self.event_keys[2]:
                             self.cars[car_idx].k_up = down * 2
-                        elif event.key == self.event_keys[3] or event.key == self.event_keys[7]:
+                        elif event.key == self.event_keys[3]:
                             self.cars[car_idx].k_down = down * -2
                         elif event.key == K_ESCAPE:
                             self.databases[car_idx].stop = True
@@ -205,7 +200,6 @@ class Game:
                 trophy_collision_car_idx = list(trophy_collision.keys())[0].player
                 self.trophy_count[trophy_collision_car_idx-1] += 1
                 print(f"Player {trophy_collision_car_idx} won the trophy")
-                print(self.trophy_count)
 
                 if self.WIN_SCORE in self.trophy_count:
                     score_max = max(self.trophy_count)
