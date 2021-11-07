@@ -122,7 +122,7 @@ Map2 = (
         # DynamicWallSprite((650, 500), (650, 600), 4, 100),
     ],
     [
-        TrophySprite()
+        # TrophySprite()
     ],
     [
         Parking((450, 500), 60, 100),
