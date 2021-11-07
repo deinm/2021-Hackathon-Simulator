@@ -8,6 +8,7 @@
 * 주최: 성균관대학교 LINC+ 사업단
 * 주관: 성균관대학교 창업동아리, HEVEN
 
+
 ### 팀 구성
 - 1팀 : `손희관(팀장)`, `곽동규`, `김태웅`, `송영보`
 - 2팀 : `이범수(팀장)`, `김석중`, `양승진`, `허재호`
@@ -18,21 +19,24 @@
 - 7팀 : `박충현(팀장)`, `김태윤`, `박지용`, `이준아`
 - 8팀 : `안호진(팀장)`, `배동근`, `전승태`, `함철훈`
 
+
 ### 규칙
 - 이번 대회는 트로피 레이스입니다.
 - 대회 진행 방식은 다음과 같습니다.   
-    1) 토너먼트제로 진행됩니다.   
-    2) 개회식 때 뽑기를 통해 상대 팀이 정해집니다.   
-    3) 저녁 8시부터 익일 아침 8시까지 코드를 작성할 수 있습니다.   
-    4) 각 경기는 먼저 10점을 획득하는 팀이 승리합니다.   
-    5) 만약 10점 득점자가 없을 시, 점수가 높은 팀이 승리합니다.   
-    6) 만약 3분 경과 시 두 팀이 동점일 경우, 먼저 해당 점수를 획득한 팀이 승리합니다.   
-    7) 여러분이 작성하셔야할 코드는 Brain.py 입니다.    
-    8) 다른 코드는 건드리실 필요 없이 Brain.py 작성 후 익일 아침 8시 이전까지 joo6058@gmail.com 으로 보내주시면 됩니다.   
-    9) 제자리 조향은 불가능합니다.   
-    10) 각 경기가 끝나면 15분 간의 코드 수정 시간이 주어집니다.   
-    11) 추가적으로 사용한 모듈이 있는 경우, requirements.txt 로  제출해주세요.   
-    
+    1. 토너먼트제로 진행됩니다.   
+    2. 개회식 때 뽑기를 통해 상대 팀이 정해집니다.   
+    3. 저녁 8시부터 익일 아침 8시까지 코드를 작성할 수 있습니다.   
+    4. 각 경기는 먼저 10점을 획득하는 팀이 승리합니다.   
+    5. 만약 10점 득점자가 없을 시, 점수가 높은 팀이 승리합니다.   
+    6. 만약 3분 경과 시 두 팀이 동점일 경우, 먼저 해당 점수를 획득한 팀이 승리합니다.   
+    7. 여러분이 작성하셔야할 코드는 Brain.py 입니다.    
+    8. 다른 코드는 건드리실 필요 없이 Brain.py 작성 후 익일 아침 8시 이전까지 joo6058@gmail.com 으로 보내주시면 됩니다.   
+    9. 제자리 조향은 불가능합니다.   
+    10. 각 경기가 끝나면 15분 간의 코드 수정 시간이 주어집니다.   
+    11. 기타 부정 행위로 간주되는 코드는 조치가 취해질 수 있습니다.
+    12. 추가적으로 사용한 모듈이 있는 경우, requirements.txt 로  제출해주세요.   
+
+
 ### 안내 사항
 1. Requirements   
     - python == 3.8   
@@ -48,10 +52,11 @@
     - `V2X` : self.database.v2x_data   
 
 3. Control   
-    - `상` : self.database.control.up()           OR          self.up(num)   
-    - `하` : self.database.control.down()         OR          self.down(num)   
-    - `좌` : self.database.control.left()         OR          self.left(num)   
-    - `우` : self.database.control.right()        OR          self.right(num)   
+    - `속도 증가` : self.database.control.up()    OR    self.up(num)   
+    - `속도 감소` : self.database.control.down()    OR    self.down(num)   
+    - `좌로 조향` : self.database.control.left()    OR    self.left(num)   
+    - `우로 조향` : self.database.control.right()    OR    self.right(num)   
 
-### related repository
+
+### Related Repository
 Reference : https://github.com/tdostilio/Race_Game
