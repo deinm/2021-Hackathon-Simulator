@@ -7,7 +7,9 @@ from Schoolzone import Schoolzone
 from TrafficSign import Right, Left
 
 import random
-import numpy as np
+import numpy as np, cv2
+
+
 
 Map1 = (
     [
@@ -47,12 +49,12 @@ Map1 = (
         WallSprite((550, 675), 4, 250),
         WallSprite((625, 125), 4, 250),
 
-        DynamicWallSprite((200, 150), (200, 65), 4, 125),
-        DynamicWallSprite((200, 650), (200, 738), 4, 125),
-        DynamicWallSprite((650, 500), (650, 600), 4, 100),
+        # DynamicWallSprite((200, 150), (200, 65), 4, 125),
+        # DynamicWallSprite((200, 650), (200, 738), 4, 125),
+        # DynamicWallSprite((650, 500), (650, 600), 4, 100),
     ],
     [
-        TrophySprite()
+        # TrophySprite()
     ],
     [
 
@@ -74,6 +76,48 @@ Map1 = (
         CarSprite('images/car.png', (50, 50), 180, player=1),
     ],
 )
+
+def making_map(map,center_x,center_y,width,height):
+    map[center_x-int(width/2):center_x+int(width/2),center_y-int(height/2):center_y+int(height/2)] = 255
+
+map1 = np.zeros((800,1000))
+
+map1[0:2,:] = 255
+map1[-2:,:] = 255
+map1[:,:2] = 255
+map1[:,-2:] = 255
+
+making_map(map1,62,100,124,4)
+making_map(map1,738,100,124,4)
+
+making_map(map1,210,100,4,200)
+
+making_map(map1,100,813,4,124)
+making_map(map1,450,875,500,4)
+making_map(map1,225,750,250,4)
+making_map(map1,500,813,100,125)
+making_map(map1,725,752,150,4)
+making_map(map1,350,688,4,125)
+making_map(map1,625,650,150,4)
+
+making_map(map1,590,100,4,200)
+making_map(map1,325,202,50,204)
+making_map(map1,475,202,50,204)
+making_map(map1,200,302,200,4)
+making_map(map1,600,302,200,4)
+making_map(map1,98,350,4,100)
+making_map(map1,625,402,350,4)
+making_map(map1,450,525,4,250)
+making_map(map1,275,450,150,100)
+making_map(map1,100,498,200,4)
+
+making_map(map1,675,550,250,4)
+making_map(map1,125,625,250,4)
+
+np.savetxt("map1.txt",map1)
+
+cv2.imshow("window",map1)
+cv2.waitKey(0)
 
 Map2 = (
     [
@@ -134,6 +178,8 @@ Map2 = (
 
     ],
     [
+        # CarSprite('images/car.png', (75, 760), 0, player=1),
+        # CarSprite('images/car.png', (75, 600), 0, player=2),
         CarSprite('images/purple_car.png', (75, 760), 0, player=2),
         CarSprite('images/car.png', (75, 600), 0, player=1),
     ],
