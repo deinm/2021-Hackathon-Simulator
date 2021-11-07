@@ -1,3 +1,4 @@
+from Game import Game
 from Wall import WallSprite, DynamicWallSprite, invisible_WallSprite
 from Car import CarSprite
 from Trophy import TrophySprite
@@ -8,8 +9,12 @@ from TrafficSign import Right, Left
 
 import random
 
+
 Map1 = (
     [
+        WallSprite((1010, 500), 20, 1400),  # Score board
+        WallSprite((1100, 650), 200, 10),
+
         WallSprite((500, 0), 1000, 4),  # Boundary box
         WallSprite((500, 800), 1000, 4),
         WallSprite((0, 400), 4, 800),

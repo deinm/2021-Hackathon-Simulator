@@ -31,11 +31,13 @@ class Game:
             ]
         pygame.init()
         self.cars = cars
-        self.screen = pygame.display.set_mode((1000, 800))
+        self.screen = pygame.display.set_mode((1200, 800))
         self.traffic_signs = traffic_signs
         self.school_zones = schoolzone
         self.clock = pygame.time.Clock()
         font = pygame.font.Font(None, 75)
+        self.font = pygame.font.SysFont("notosansmonocjkkrregular", 50, True, False)
+        self.score_font = pygame.font.SysFont("notosansmonocjkkrregular", 100, True, False)
         self.win_font = pygame.font.Font(None, 50)
         self.win_condition = None
         self.win_text = font.render('', True, (0, 255, 0))
@@ -56,23 +58,25 @@ class Game:
                            K_d, K_a, K_w, K_s]
         self.trophy_count = [0, 0]
         self.timeout_flag = False
+        self.initial_time = None
+        self.seconds = 0
 
     def run(self, auto=False):
-        seconds = 0
+        # seconds = 0
         record = False
         temp_v2x_data = []
         crashed_cars = []
-        initial_time = time.time()
+        self.initial_time = time.time()
         while True:
             deltat = self.clock.tick(30)
-            seconds = time.time() - initial_time
+            self.seconds = time.time() - self.initial_time
 
-            if seconds >= self.TIME_LIMIT:
+            if self.seconds >= self.TIME_LIMIT:
                 self.timeout_flag = True
 
             if self.win_condition is not None and not record:
                 record = True
-                result = seconds
+                result = self.seconds
                 print("Total time:", result)
 
             if self.timeout_flag and self.trophy_count[0] != self.trophy_count[1]:
@@ -142,7 +146,7 @@ class Game:
             
             for crashed_car_idx in crashed_cars:
                 user_car = self.cars[crashed_car_idx - 1]
-                if user_car.last_collision + 2 <= seconds:
+                if user_car.last_collision + 2 <= self.seconds:
                     user_car.respawn()
                     user_car.MAX_FORWARD_SPEED = 15
                     user_car.MAX_REVERSE_SPEED = 15
@@ -154,7 +158,7 @@ class Game:
             
             collisions = pygame.sprite.groupcollide(
                 self.car_group, self.wall_group, False, False, collided=pygame.sprite.collide_rect_ratio(0.95))
-
+            self.score_board()
             # 벽과 충돌했을 때
             if collisions != {}:
                 # self.car_update = False
@@ -169,7 +173,7 @@ class Game:
                     user_car.MAX_REVERSE_SPEED = 0
                     user_car.k_right = 0
                     user_car.k_left = 0
-                    user_car.crash(seconds, pygame.image.load('images/collision.png'))
+                    user_car.crash(self.seconds, pygame.image.load('images/collision.png'))
                     
                 collisions = {}
             
@@ -215,6 +219,7 @@ class Game:
 
                 # trophy respawn
                 self.trophy_group.sprites()[0].trophy_respawn()
+                
 
             # print(temp_v2x_data)
             temp_v2x_data.clear()
@@ -302,6 +307,53 @@ class Game:
             pygame.display.flip()
 
             self.make_lidar_data()
+            
+
+    # Score Board
+    def score_board(self, x = 1030, y = 140):
+        PURPLE = (123,88,254)
+        GREEN = (30, 180, 0)
+
+        player1 = self.font.render("Player 1", True, GREEN)
+        self.screen.blit(player1, [x, y])
+
+        score1 = self.score_font.render(str(self.trophy_count[0]), True, GREEN)
+        self.screen.blit(score1, [1080, y+100])
+        score2 = self.score_font.render(str(self.trophy_count[1]), True, PURPLE)
+        self.screen.blit(score2, [1080, y+220])
+
+        player2 = self.font.render("Player 2", True, PURPLE)
+        self.screen.blit(player2, [x, y+340])
+
+        time_format = self.time_format()
+        time = self.font.render(time_format, True, (255,255,255))
+        self.screen.blit(time, [x, 700])
+
+    def time_format(self):
+        seconds = self.seconds
+        minute = 0
+        second = 0
+        millisecond = 0
+        if seconds < 60:
+            minute = "0"
+            second = str(int(seconds))
+            temp = round(seconds, 3)*1000
+            millisecond = str(int(temp%1000))
+        elif seconds < 120:
+            minute = "1"
+            second = str(int(seconds-60))
+            temp = round(seconds-60, 3)*1000
+            millisecond = str(int(temp%1000))
+        elif seconds < 180:
+            minute = "2"
+            second = str(int(seconds-120))
+            temp = round(seconds-120, 3)*1000
+            millisecond = str(int(temp%1000))
+        else:
+            pass
+        time_format = f"{minute}:{second}:{millisecond}"
+        return time_format
+
 
     def again(self, auto):
         self.__init__(*self.init_args)
