@@ -72,8 +72,8 @@ Map1 = (
 
     ],
     [
-        CarSprite('images/purple_car.png', (50, 750), 0, player=2),
-        CarSprite('images/car.png', (50, 50), 180, player=1),
+        CarSprite('images/purple_car.png', (50, 750), 0, player=1),
+        CarSprite('images/car.png', (50, 50), 180, player=2),
     ],
 )
 
@@ -178,10 +178,8 @@ Map2 = (
 
     ],
     [
-        # CarSprite('images/car.png', (75, 760), 0, player=1),
-        # CarSprite('images/car.png', (75, 600), 0, player=2),
-        CarSprite('images/purple_car.png', (75, 760), 0, player=2),
-        CarSprite('images/car.png', (75, 600), 0, player=1),
+        CarSprite('images/purple_car.png', (75, 760), 0, player=1),
+        CarSprite('images/car.png', (75, 600), 0, player=2),
     ],
 )
 
@@ -246,8 +244,8 @@ Map3 = (
         Schoolzone((250, 350), 550, 100),
     ],
     [
-        CarSprite('images/purple_car.png', (50, 750), 0, player=2),
-        CarSprite('images/car.png', (75, 600), 0, player=1),
+        CarSprite('images/purple_car.png', (50, 750), 0, player=1),
+        CarSprite('images/car.png', (75, 600), 0, player=2),
     ],
 )
 
@@ -298,7 +296,7 @@ Map4 = (
 
     ],
     [
-        CarSprite('images/car.png', (75, 760), 0, player=1),
+        CarSprite('images/purple_car.png', (75, 760), 0, player=1),
         CarSprite('images/car.png', (75, 600), 0, player=2),
     ],
 )
