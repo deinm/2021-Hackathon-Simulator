@@ -1,5 +1,6 @@
 import pygame
 import random as rd
+import json
 from V2X import V2X
 
 class TrophySprite(pygame.sprite.Sprite):
@@ -13,6 +14,10 @@ class TrophySprite(pygame.sprite.Sprite):
             2 : [(10, 15),(10, 315),(10, 515),(10, 715)],
             3 : [(470, 15),(470, 375),(570, 220),(700, 515),(240, 220),(400, 615),(470, 715)],
         }
+        # load trophy position from file.
+        position_filename = "INSERT FILENAME HERE"
+        with open(position_filename, "r") as f:
+            self.position_dict = json.loads(f)
         self.rect.x, self.rect.y = (470, 375)
         self.idx = None
         V2X.__init__(self, (self.rect.x, self.rect.y), name="Trophy")
