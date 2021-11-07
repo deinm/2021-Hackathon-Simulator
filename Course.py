@@ -121,12 +121,8 @@ Map2 = (
         TrophySprite()
     ],
     [
-<<<<<<< Updated upstream
-
-=======
         Parking((450, 500), 60, 100),
         Parking((550, 100), 60, 100),
->>>>>>> Stashed changes
     ],
     [
 
@@ -142,8 +138,6 @@ Map2 = (
         CarSprite('images/car.png', (50, 50), 180, player=2),
     ],
 )
-
-
 
 Map3 = (
     [
@@ -209,8 +203,6 @@ Map3 = (
         CarSprite('images/car.png', (50, 750), 0, player=1),
         CarSprite('images/car.png', (75, 600), 0, player=2),
     ],
-
-
 )
 
 Map4 = (
