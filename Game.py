@@ -75,6 +75,15 @@ class Game:
                 result = seconds
                 print("Total time:", result)
 
+            if self.timeout_flag and self.trophy_count[0] != self.trophy_count[1]:
+                print("Timeout!")
+                print(f"Player 1 : {self.trophy_count[0]}\nPlayer 2 : {self.trophy_count[1]}")
+                if self.trophy_count[0] > self.trophy_count[1]:
+                    print("Player 1 wins!")
+                else:
+                    print("Player 2 wins!")
+                break
+
             # Car control
             events = pygame.event.get()
 
@@ -198,10 +207,10 @@ class Game:
                 print(f"Player {trophy_collision_car_idx} won the trophy")
                 print(self.trophy_count)
 
-                if self.WIN_SCORE in self.trophy_count or self.timeout_flag:
+                if self.WIN_SCORE in self.trophy_count:
                     score_max = max(self.trophy_count)
                     win_player = [player for player, score in enumerate(self.trophy_count) if score == score_max][0] + 1
-                    print(f"player {win_player} wins!")
+                    print(f"Player {win_player} wins!")
                     break
 
                 # trophy respawn
