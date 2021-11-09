@@ -1,5 +1,6 @@
 import pygame
 import math
+import random
 import inspect
 import sys
 import platform
@@ -28,6 +29,27 @@ class CarSprite(pygame.sprite.Sprite):
         self.initial_direction = direction
         self.initial_position = position
         self.last_collision = 999
+        self.random_respawn_list = [
+            ((50, 50), 180),
+            ((50, 750), 0),
+            ((100, 170), 270),
+            ((100, 630), 270),
+            ((150, 260), 90),
+            ((150, 550), 90),
+            ((300, 750), 270),
+            ((350, 50), 270),
+            ((350, 260), 180),
+            ((350, 600), 0),
+            ((480, 400), 270),
+            ((480, 630), 0),
+            ((560, 170), 180),
+            ((650, 750), 270),
+            ((690, 300), 90),
+            ((810, 50), 270),
+            ((810, 300), 180),
+            ((810, 750), 270),
+            ((940, 300), 180)
+        ]
         if player == 2:
             self.event_keys = [K_d, K_a, K_w, K_s]
         self.update()
@@ -53,10 +75,11 @@ class CarSprite(pygame.sprite.Sprite):
         self.rect.center = self.__position
     
     def respawn(self):
+        random_respawn_point = self.random_respawn_list[random.randrange(len(self.random_respawn_list))]
         self.__speed = 0
-        self.__direction = self.initial_direction
+        self.__direction = random_respawn_point[1]
         self.__k_left = self.__k_right = self.__k_down = self.__k_up = 0
-        self.__position = self.initial_position        
+        self.__position = random_respawn_point[0]                
         self.__src_image = self.car_image
         self.last_collision = 999
         self.update()
