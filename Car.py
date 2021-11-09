@@ -62,7 +62,10 @@ class CarSprite(pygame.sprite.Sprite):
         if self.__speed < -self.__MAX_REVERSE_SPEED:
             self.__speed = -self.__MAX_REVERSE_SPEED
         if self.__speed != 0:
-            self.__direction += (self.__k_right + self.__k_left)
+            if self.__speed > 0:
+                self.__direction += (self.__k_right + self.__k_left)
+            else:
+                self.__direction -= (self.__k_right + self.__k_left)
             self.__direction = self.__direction % 360
         x, y = (self.__position)
         rad = self.__direction * math.pi / 180
