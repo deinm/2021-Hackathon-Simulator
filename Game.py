@@ -60,6 +60,7 @@ class Game:
         self.timeout_flag = False
         self.initial_time = None
         self.seconds = 0
+        self.trophy_respawn_time = 0
 
     def run(self, auto=False):
         # seconds = 0
@@ -219,6 +220,12 @@ class Game:
 
                 # trophy respawn
                 self.trophy_group.sprites()[0].trophy_respawn()
+                self.trophy_respawn_time = time.time()
+
+            # 1분 동안 trophy 아무도 못먹으면 trophy respawn
+            if time.time() - self.trophy_respawn_time > 60:
+                self.trophy_group.sprites()[0].trophy_respawn()
+                self.trophy_respawn_time = time.time()
                 
 
             # print(temp_v2x_data)
