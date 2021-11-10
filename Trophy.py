@@ -1,18 +1,20 @@
+import os
+import json
 import pygame
 import random as rd
-import json
+
 from V2X import V2X
 
 
 class TrophySprite(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, map_idx):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('images/trophy.png')
         self.image = pygame.transform.scale(self.image, (70, 70))
         self.rect = self.image.get_rect()
 
         # load trophy position from file.
-        position_filename = "trophies.json"
+        position_filename = os.path.join("trophies", f"trophies{map_idx}.json")
         with open(position_filename, "r") as f:
             self.position_dict = json.load(f)
         self.rect.x, self.rect.y = [320, 360]
