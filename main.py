@@ -59,8 +59,9 @@ if __name__ == "__main__":
         )
     parser.add_argument(
             "--num_player",
-            help="Define the number of players.",
-            action="store_true", default=1
+            help="Define the number of players. "
+                 "The max # of player is 2.",
+            action="store_true", default=2
         )
     args = parser.parse_args()
     main(args.auto, args.num_player)
