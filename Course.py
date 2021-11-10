@@ -9,7 +9,6 @@ from TrafficSign import Right, Left
 
 import random
 
-
 Map1 = (
     [
         WallSprite((1010, 500), 20, 1400),  # Score board
@@ -52,7 +51,7 @@ Map1 = (
         DynamicWallSprite((650, 500), (650, 600), 4, 100),
     ],
     [
-        TrophySprite()
+        TrophySprite(1)
     ],
     [
 
@@ -114,11 +113,50 @@ Map2 = (
         # DynamicWallSprite((650, 500), (650, 600), 4, 100),
     ],
     [
-        TrophySprite()
+        TrophySprite(2)
     ],
     [
-        Parking((450, 500), 60, 100),
-        Parking((550, 100), 60, 100),
+        
+    ],
+    [
+
+    ],
+    [
+
+    ],
+    [
+
+    ],
+    [
+        CarSprite('images/car.png', (50, 50), 180, player=1),
+        CarSprite('images/purple_car.png', (50, 750), 0, player=2),
+    ],
+)
+
+Map3 = (
+    [
+        WallSprite((500, 0), 1000, 4),  # Boundary box
+        WallSprite((500, 800), 1000, 4),
+        WallSprite((0, 400), 4, 800),
+        WallSprite((1000, 400), 4, 800),
+
+        WallSprite((170, 210), 200, 4),
+        WallSprite((370, 710), 200, 4),
+        WallSprite((570, 210), 200, 4),
+        WallSprite((770, 710), 200, 4),
+        WallSprite((70, 460), 4, 500),
+        WallSprite((270, 460), 4, 500),
+        WallSprite((470, 460), 4, 500),
+        WallSprite((670, 460), 4, 500),
+        WallSprite((870, 460), 4, 500),
+
+        DynamicWallSprite((200, 150), (200, 65), 4, 125),
+    ],
+    [
+        TrophySprite(2)
+    ],
+    [
+
     ],
     [
 

@@ -7,7 +7,7 @@ import pygame
 from Brain1 import Brain1
 from Brain2 import Brain2
 from Control import Control
-from Course import Map1, Map2
+from Course import Map1, Map2, Map3
 from Database import Database
 from Game import Game
 from LiDAR import LiDAR
@@ -16,7 +16,7 @@ from LiDAR import LiDAR
 def main(auto, num_player):
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (500, 30)
     # _ = (Map1, Map2, Map3)
-    walls, trophies, parkings, crosswalks, traffic_signs, schoolzone, cars = Map1
+    walls, trophies, parkings, crosswalks, traffic_signs, schoolzone, cars = Map3
 
     if len(cars) != num_player:
         cars = cars[:num_player]
