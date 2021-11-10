@@ -16,7 +16,7 @@ from LiDAR import LiDAR
 def main(auto, num_player):
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (500, 30)
     # _ = (Map1, Map2, Map3)
-    walls, trophies, parkings, crosswalks, traffic_signs, schoolzone, cars = Map3
+    walls, trophies, parkings, crosswalks, traffic_signs, schoolzone, cars = Map1
 
     if len(cars) != num_player:
         cars = cars[:num_player]

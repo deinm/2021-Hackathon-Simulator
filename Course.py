@@ -116,7 +116,7 @@ Map2 = (
         TrophySprite(2)
     ],
     [
-        
+
     ],
     [
 
@@ -153,7 +153,7 @@ Map3 = (
         DynamicWallSprite((200, 150), (200, 65), 4, 125),
     ],
     [
-        TrophySprite(2)
+        TrophySprite(3)
     ],
     [
 
