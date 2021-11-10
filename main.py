@@ -39,10 +39,9 @@ def main(auto, num_player):
                 crosswalks, traffic_signs, schoolzone, cars, databases)
 
     if auto:
-        brain_thread1 = threading.Thread(target=brains[0].run,)
-        brain_thread2 = threading.Thread(target=brains[1].run,)
-        brain_thread1.start()
-        brain_thread2.start()
+        for brain in brains:
+            brain_thread = threading.Thread(target=brain.run)
+            brain_thread.start()
     game.run(auto=auto)
     pygame.quit()
 
