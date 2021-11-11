@@ -16,7 +16,7 @@ from Dynamic import Dynamic
 
 class Game:
     WIN_SCORE = 10
-    TIME_LIMIT = 180 # seconds
+    TIME_LIMIT = 480 # seconds
 
     def __init__(self, walls, trophies, parkings,
                  crosswalks, traffic_signs, schoolzone, cars: Iterable[CarSprite], databases):
@@ -72,7 +72,7 @@ class Game:
             deltat = self.clock.tick(30)
             self.seconds = time.time() - self.initial_time
 
-            if self.seconds >= self.TIME_LIMIT:
+            if self.seconds >= Game.TIME_LIMIT:
                 self.timeout_flag = True
 
             if self.win_condition is not None and not record:
@@ -80,13 +80,15 @@ class Game:
                 result = self.seconds
                 print("Total time:", result)
 
-            if self.timeout_flag and self.trophy_count[0] != self.trophy_count[1]:
+            if self.timeout_flag:
                 print("Timeout!")
                 print(f"Player 1 : {self.trophy_count[0]}\nPlayer 2 : {self.trophy_count[1]}")
                 if self.trophy_count[0] > self.trophy_count[1]:
                     print("Player 1 wins!")
-                else:
+                elif self.trophy_count[0] < self.trophy_count[1]:
                     print("Player 2 wins!")
+                else:
+                    print("draw!")
                 break
 
             # Car control
@@ -228,7 +230,7 @@ class Game:
                 self.trophy_respawn_time = time.time()
 
             # 1분 동안 trophy 아무도 못먹으면 trophy respawn
-            if time.time() - self.trophy_respawn_time > 60:
+            if time.time() - self.trophy_respawn_time > 120:
                 self.trophy_group.sprites()[0].trophy_respawn()
                 self.trophy_respawn_time = time.time()
                 
@@ -346,24 +348,29 @@ class Game:
         minute = 0
         second = 0
         millisecond = 0
-        if seconds < 60:
-            minute = "0"
-            second = str(int(seconds))
-            temp = round(seconds, 3)*1000
-            millisecond = str(int(temp%1000))
-        elif seconds < 120:
-            minute = "1"
-            second = str(int(seconds-60))
-            temp = round(seconds-60, 3)*1000
-            millisecond = str(int(temp%1000))
-        elif seconds < 180:
-            minute = "2"
-            second = str(int(seconds-120))
-            temp = round(seconds-120, 3)*1000
-            millisecond = str(int(temp%1000))
-        else:
-            pass
-        time_format = f"{minute}:{second}:{millisecond}"
+        i = int(seconds//60)
+        second = str(int(seconds-60*i))
+        temp = round(seconds-60*i, 3)*1000
+        millisecond = str(int(temp%1000))
+
+        # if seconds < 60:
+        #     minute = "0"
+        #     second = str(int(seconds))
+        #     temp = round(seconds, 3)*1000
+        #     millisecond = str(int(temp%1000))
+        # elif seconds < 120:
+        #     minute = "1"
+        #     second = str(int(seconds-60))
+        #     temp = round(seconds-60, 3)*1000
+        #     millisecond = str(int(temp%1000))
+        # elif seconds < 180:
+        #     minute = "2"
+        #     second = str(int(seconds-120))
+        #     temp = round(seconds-120, 3)*1000
+        #     millisecond = str(int(temp%1000))
+        # else:
+        #     pass
+        time_format = f"{i}:{second}:{millisecond}"
         return time_format
 
 

@@ -13,7 +13,7 @@ class WallSprite(pygame.sprite.Sprite):
         self.rect = pygame.Rect(self.normal.get_rect())
         self.rect.center = position
         self.image = self.normal
-
+        
     def update(self):
         pass
 
@@ -62,7 +62,6 @@ class invisible_WallSprite(pygame.sprite.Sprite):
 
     def update(self):
         pass
-
 
 if __name__ == "__main__":
     pygame.init()
