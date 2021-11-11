@@ -16,7 +16,11 @@ from Dynamic import Dynamic
 
 class Game:
     WIN_SCORE = 10
+<<<<<<< HEAD
     TIME_LIMIT = 480 # seconds
+=======
+    TIME_LIMIT = 180  # seconds
+>>>>>>> main
 
     def __init__(self, walls, trophies, parkings,
                  crosswalks, traffic_signs, schoolzone, cars: Iterable[CarSprite], databases):
@@ -54,8 +58,11 @@ class Game:
         self.dynamic_flag = False
         self.dynamic = Dynamic('images/bird.png', (-100, 0))
         self.dynamic_group = pygame.sprite.RenderPlain(self.dynamic)
-        self.event_keys = [K_RIGHT, K_LEFT, K_UP, K_DOWN,
-                           K_d, K_a, K_w, K_s]
+
+        self.event_keys = [K_RIGHT, K_LEFT, K_UP, K_DOWN]
+        if len(cars) == 2:
+            self.event_keys.extend([K_d, K_a, K_w, K_s])
+
         self.trophy_count = [0, 0]
         self.timeout_flag = False
         self.initial_time = None
@@ -100,45 +107,47 @@ class Game:
 
             for event in events:
                 if not hasattr(event, 'key') or \
-                    (auto and
-                     event.type != USEREVENT and 
-                     event.key in self.event_keys):
+                        (auto and
+                         event.type != USEREVENT and
+                         event.key in self.event_keys):
                     continue
 
                 if auto:
-                    if self.win_condition is None:
+                    if self.win_condition is None and event.key in self.event_keys:
                         car_idx = event.key in self.event_keys[4:]  # if 0~3(True): 1st car, 4~7, 2nd car(False)
-                        if event.key == self.event_keys[0] or event.key == self.event_keys[4]:
+                        key_idx = self.event_keys.index(event.key)
+                        if key_idx % 4 == 0:
                             if self.cars[car_idx].k_right > -8:
                                 self.cars[car_idx].k_right += -1
-                        elif event.key == self.event_keys[1] or event.key == self.event_keys[5]:
+                        elif key_idx % 4 == 1:
                             if self.cars[car_idx].k_left < 8:
                                 self.cars[car_idx].k_left += 1
-                        elif event.key == self.event_keys[2] or event.key == self.event_keys[6]:
+                        elif key_idx % 4 == 2:
                             if self.cars[car_idx].k_up < 5:
                                 self.cars[car_idx].k_up += 1
-                        elif event.key == self.event_keys[3] or event.key == self.event_keys[7]:
+                        elif key_idx % 4 == 3:
                             if self.cars[car_idx].k_down > -5:
                                 self.cars[car_idx].k_down += -1
                         elif event.key == K_ESCAPE:
                             self.databases[car_idx].stop = True
                 else:
                     down = event.type == KEYDOWN
-                    if self.win_condition is None:
+                    if self.win_condition is None and event.key in self.event_keys:
                         car_idx = event.key in self.event_keys[4:]  # if 0~3(True): 1st car, 4~7, 2nd car(False)
-                        if event.key == self.event_keys[0] or event.key == self.event_keys[4]:
+                        key_idx = self.event_keys.index(event.key)
+                        if key_idx % 4 == 0:
                             self.cars[car_idx].k_right = down * -5
-                        elif event.key == self.event_keys[1] or event.key == self.event_keys[5]:
+                        elif key_idx % 4 == 1:
                             self.cars[car_idx].k_left = down * 5
-                        elif event.key == self.event_keys[2] or event.key == self.event_keys[6]:
+                        elif key_idx % 4 == 2:
                             self.cars[car_idx].k_up = down * 2
-                        elif event.key == self.event_keys[3] or event.key == self.event_keys[7]:
+                        elif key_idx % 4 == 3:
                             self.cars[car_idx].k_down = down * -2
                         elif event.key == K_ESCAPE:
                             self.databases[car_idx].stop = True
-                
+
                 if self.win_condition is not None and \
-                    (event.key == K_ESCAPE and event.key == K_SPACE):
+                        (event.key == K_ESCAPE and event.key == K_SPACE):
                     print(result)
                     time.sleep(0.1)
                     for database in self.databases:
@@ -146,19 +155,19 @@ class Game:
 
             if True in [database.stop for database in self.databases]:
                 break
-            
+
             for crashed_car_idx in crashed_cars:
                 user_car = self.cars[crashed_car_idx - 1]
                 if user_car.last_collision + 2 <= self.seconds:
                     user_car.respawn()
                     user_car.MAX_FORWARD_SPEED = 15
                     user_car.MAX_REVERSE_SPEED = 15
-                    
+
             # RENDERING
             self.screen.fill((0, 0, 0))
             if self.car_update:
                 self.car_group.update(deltat)
-            
+
             collisions = pygame.sprite.groupcollide(
                 self.car_group, self.wall_group, False, False, collided=pygame.sprite.collide_rect_ratio(0.95))
             self.score_board()
@@ -177,9 +186,8 @@ class Game:
                     user_car.k_right = 0
                     user_car.k_left = 0
                     user_car.crash(self.seconds, pygame.image.load('images/collision.png'))
-                    
+
                 collisions = {}
-            
 
             crosswalk_collisions = pygame.sprite.groupcollide(
                 self.car_group,
@@ -195,7 +203,7 @@ class Game:
                 False,
                 False
             )
-            
+
             for user_car, colled_crosswalk in crosswalk_collisions.items():
                 if colled_crosswalk[0].color == "red":
                     crashed_cars = [user_car.player for user_car in list(crosswalk_collisions.keys())]
@@ -209,13 +217,13 @@ class Game:
                         user_car.k_right = 0
                         user_car.k_left = 0
                         user_car.crash(self.seconds, pygame.image.load('images/collision.png'))
-                    
+
                     crosswalk_collisions = {}
 
             # trophy 먹었을 때
             if trophy_collision != {}:
                 trophy_collision_car_idx = list(trophy_collision.keys())[0].player
-                self.trophy_count[trophy_collision_car_idx-1] += 1
+                self.trophy_count[trophy_collision_car_idx - 1] += 1
                 print(f"Player {trophy_collision_car_idx} won the trophy")
                 print(self.trophy_count)
 
@@ -233,7 +241,6 @@ class Game:
             if time.time() - self.trophy_respawn_time > 120:
                 self.trophy_group.sprites()[0].trophy_respawn()
                 self.trophy_respawn_time = time.time()
-                
 
             # print(temp_v2x_data)
             temp_v2x_data.clear()
@@ -321,58 +328,37 @@ class Game:
             pygame.display.flip()
 
             self.make_lidar_data()
-            
 
     # Score Board
-    def score_board(self, x = 1030, y = 140):
-        PURPLE = (123,88,254)
+    def score_board(self, x=1030, y=140):
+        PURPLE = (123, 88, 254)
         GREEN = (30, 180, 0)
 
         player1 = self.font.render("Player 1", True, GREEN)
         self.screen.blit(player1, [x, y])
 
         score1 = self.score_font.render(str(self.trophy_count[0]), True, GREEN)
-        self.screen.blit(score1, [1080, y+100])
+        self.screen.blit(score1, [1080, y + 100])
         score2 = self.score_font.render(str(self.trophy_count[1]), True, PURPLE)
-        self.screen.blit(score2, [1080, y+220])
+        self.screen.blit(score2, [1080, y + 220])
 
         player2 = self.font.render("Player 2", True, PURPLE)
-        self.screen.blit(player2, [x, y+340])
+        self.screen.blit(player2, [x, y + 340])
 
         time_format = self.time_format()
-        time = self.font.render(time_format, True, (255,255,255))
+        time = self.font.render(time_format, True, (255, 255, 255))
         self.screen.blit(time, [x, 700])
 
     def time_format(self):
         seconds = self.seconds
-        minute = 0
         second = 0
         millisecond = 0
-        i = int(seconds//60)
-        second = str(int(seconds-60*i))
-        temp = round(seconds-60*i, 3)*1000
+        minute = int(seconds//60)
+        second = str(int(seconds-60*minute))
+        temp = round(seconds-60*minute, 3)*1000
         millisecond = str(int(temp%1000))
-
-        # if seconds < 60:
-        #     minute = "0"
-        #     second = str(int(seconds))
-        #     temp = round(seconds, 3)*1000
-        #     millisecond = str(int(temp%1000))
-        # elif seconds < 120:
-        #     minute = "1"
-        #     second = str(int(seconds-60))
-        #     temp = round(seconds-60, 3)*1000
-        #     millisecond = str(int(temp%1000))
-        # elif seconds < 180:
-        #     minute = "2"
-        #     second = str(int(seconds-120))
-        #     temp = round(seconds-120, 3)*1000
-        #     millisecond = str(int(temp%1000))
-        # else:
-        #     pass
-        time_format = f"{i}:{second}:{millisecond}"
+        time_format = f"{minute}:{second}:{millisecond}"
         return time_format
-
 
     def again(self, auto):
         self.__init__(*self.init_args)
