@@ -16,11 +16,7 @@ from Dynamic import Dynamic
 
 class Game:
     WIN_SCORE = 10
-<<<<<<< HEAD
     TIME_LIMIT = 480 # seconds
-=======
-    TIME_LIMIT = 180  # seconds
->>>>>>> main
 
     def __init__(self, walls, trophies, parkings,
                  crosswalks, traffic_signs, schoolzone, cars: Iterable[CarSprite], databases):
