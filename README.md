@@ -76,7 +76,7 @@
 # Manual
 python main.py
 
-# Auto
+# Moving by Brain.py
 python main.py --auto
 
 # 1 player
