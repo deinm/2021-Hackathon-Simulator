@@ -71,5 +71,17 @@
     - `우로 조향` : self.database.control.right()&nbsp;&nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;&nbsp;self.right(num)
 
 
+### How to execute game
+```bash
+# Manual
+python main.py
+
+# Auto
+python main.py --auto
+
+# 1 player
+python main.py --num_player=1
+```
+
 ### Related Repository
 Reference : https://github.com/tdostilio/Race_Game
