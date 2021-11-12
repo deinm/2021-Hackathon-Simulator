@@ -20,7 +20,7 @@ class WallSprite(pygame.sprite.Sprite):
 class DynamicWallSprite(pygame.sprite.Sprite):
     def __init__(self, initial_position, target_position, width, height):
         super(DynamicWallSprite, self).__init__()
-        black_wall = [255,127,0] * np.ones((width, height, 3))
+        black_wall = 255 * np.ones((width, height, 3))
         self.normal = pygame.surfarray.make_surface(black_wall)
         self.rect = pygame.Rect(self.normal.get_rect())
         self.initial_position = initial_position
